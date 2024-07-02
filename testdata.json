@@ -1,0 +1,7 @@
+[
+	{
+		"name" : "age quota",
+		"cellcount": "1",
+		"items": [{"age" : "8"}, {"gender": "2"}]
+	}
+]
