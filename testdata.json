@@ -1,7 +1,17 @@
 [
 	{
-		"name" : "age quota",
+		"name" : "gender x age quota",
 		"cellcount": "1",
-		"items": [{"age" : "8"}, {"gender": "2"}]
+		"items": [{"gender": "2"}, {"age" : "8"}]
+	},
+	{
+		"name" : "region quota",
+		"cellcount": "1",
+		"items": [{"region" : "5"}]
+	},
+		{
+		"name" : "country x csp x cell quota",
+		"cellcount": "2",
+		"items": [{"country": "4"}, {"csp" : "3"}, {"cell": "5"}]
 	}
 ]
