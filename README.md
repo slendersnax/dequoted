@@ -70,10 +70,6 @@ region_4,999
 region_5,999
 ```
 
-### bugs
-
-At the moment, when using the script in Powershell it will fail when given filenames in this format: `.\filename.json`, due to the first `.` character.
-
 ### q&a
 
 Why JSON to CSV?
@@ -86,5 +82,5 @@ JSON is very popular and (I think) easy to understand. CSV because it's easy to 
 - [ ] add examples
 - [ ] create option to make irregular numbering patterns
 - [x] ~~add easy-to-run Bash and Batch files~~
-	- [ ] test on Windows - apparently depending on the Python installation, executing `python`, `python.exe`, `python3.exe` doesn't actually execute python
+	- [x] test on Windows - it works, but apparently depending on the Python installation, executing `python`, `python.exe`, `python3.exe` doesn't actually execute python...which is not my problem
 - [x] make input and output filenames parameters

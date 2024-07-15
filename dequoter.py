@@ -1,4 +1,4 @@
-import json, csv, sys
+import json, csv, sys, os
 
 def rec_quotaline(csv_file, arr, s_line):
 		for i in range(1, int(arr[0][1]) + 1):
@@ -9,7 +9,7 @@ def rec_quotaline(csv_file, arr, s_line):
 
 def generate_csv(json_file):
 	json_file = open(json_file, "rt")
-	csv_file = open("result_{}.csv".format(json_file.name.split(".")[0]), "wt")
+	csv_file = open("result_{}.csv".format(os.path.basename(json_file.name).split(".")[0]), "wt")
 
 	table_data = json.load(json_file)
 
