@@ -1,7 +1,20 @@
 import json, csv, sys, os
 
 def rec_quotaline(csv_file, arr, s_line):
-		for i in range(1, int(arr[0][1]) + 1):
+		# the value format in these items is the same as for the range() function
+		# start, end, step
+		nStart = 1
+		nEnd = arr[0][1]
+		nStep = 1
+
+		if len(arr[0]) > 2:
+			nStart = arr[0][1]
+			nEnd = arr[0][2]
+
+		if len(arr[0]) > 3:
+			nStep = arr[0][3]
+
+		for i in range(nStart, nEnd + 1, nStep):
 			if len(arr) > 1:
 				rec_quotaline(csv_file, arr[1:], s_line + "{}_{},".format(arr[0][0], str(i)))
 			else:
@@ -9,6 +22,7 @@ def rec_quotaline(csv_file, arr, s_line):
 
 def generate_csv(json_file):
 	json_file = open(json_file, "rt")
+	# that long ass .format is just to include the JSON file's name without extension or the full path
 	csv_file = open("result_{}.csv".format(os.path.basename(json_file.name).split(".")[0]), "wt")
 
 	table_data = json.load(json_file)
@@ -19,8 +33,19 @@ def generate_csv(json_file):
 		stack = []
 
 		for item in quota["items"]:
-			for key, value in item.items():
-				stack.append([key, value])
+			arr = []
+
+			for key in item.keys():
+				arr.append(key)
+			
+			for value in item.values():
+				if type(value) == int:
+					arr.append(value)
+				else:
+					for el in value:
+						arr.append(el)
+
+			stack.append(arr)
 
 		rec_quotaline(csv_file, stack, "")
 		csv_file.write("\n")
