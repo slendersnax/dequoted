@@ -42,7 +42,7 @@ The JSON files should have the following format:
 
 Where:
 
-- name: the name of the quota sheet
+- name: the name of the quota table
 - cellcount: the number of cells to be selected by the Least Fill
 - items: an array of **key: value** pairs, which will determine the quota cell names and how many of them to create
 	- use one element to create simple quotas, and multiple to create crossed quotas
@@ -51,7 +51,7 @@ Where:
 For example, the first two elements of the JSON code above will generate the following:
 
 ```
-# cells:1 = gender x age quota,#
+# = gender x age quota,#
 gender_1,age_2,999
 gender_1,age_3,999
 gender_1,age_4,999
@@ -67,7 +67,7 @@ gender_2,age_6,999
 gender_2,age_7,999
 gender_2,age_8,999
 
-# cells:1 = region quota
+# = region quota
 region_1,999
 region_2,999
 region_3,999

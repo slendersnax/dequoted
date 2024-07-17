@@ -28,7 +28,7 @@ def generate_csv(json_file):
 	table_data = json.load(json_file)
 
 	for quota in table_data:
-		csv_file.write("# " + ("" if quota["cellcount"] == "1" else "cells:{} ".format(quota["cellcount"])) + "= " + quota["name"] + (",#" * (len(quota["items"]) - 1)) + "\n")
+		csv_file.write("# " + ("" if quota["cellcount"] == 1 else "cells:{} ".format(quota["cellcount"])) + "= " + quota["name"] + (",#" * (len(quota["items"]) - 1)) + "\n")
 
 		stack = []
 
