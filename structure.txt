@@ -1,0 +1,27 @@
+quota-definitions {
+    list of definitions, where one definition is:
+    slot - definition {
+        Label,
+        Cell count,
+
+        Radio: predefined, pattern {
+            if predefined { 
+                textarea with list of predefined markers
+            }
+
+            if pattern {
+                list of patterns, where one pattern is:
+                slot - pattern {
+                    marker label / name,
+                    start,
+                    end,
+                    step
+                }
+
+                button - add pattern
+            }
+        }
+    }
+
+    button - add definition
+}

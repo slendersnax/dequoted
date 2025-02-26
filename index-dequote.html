@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en-GB">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <style>
+            #quota-definitions {
+                border-bottom: 1px solid #000;
+                padding: 1em 0em;
+                margin-bottom: 1em;
+            }
+
+            #quota-definitions .definition {
+                border: 0.5px solid #ccc;
+            }
+
+            .definition .input-container {
+                display: flex;
+                margin-bottom: 0.5em;
+                max-width: 300px;
+            }
+
+            .definition .input-container * {
+                flex: 1;
+            }
+
+            .definition .input-container.input-pattern {
+                display: block;
+            }
+
+            .definition .input-pattern input {
+                width: 5em;
+            }
+        </style>
+
+        <title>Dequoter</title>
+    </head>
+    <body>
+        <div id="quota-definitions">
+            <!-- <div class="definition" id="definition-1" quota-num="1">
+                <h3>Quota 1</h3>
+
+                <div class="input-container">
+                    <label for="name-1">Label:</label>
+                    <input type="text" id="name-1"/>
+                </div>
+
+                <div class="input-container">
+                    <label for="cellcount-1">Cell count:</label>
+                    <input type="number" id="cellcount-1"/>
+                </div>
+                
+                <div class="input-container">
+                    <label for="series-type-1-1">Predefined</label>
+                    <input type="radio" name="series-type-1" id="series-type-1-1" class="predefined-radio">
+
+                    <label for="series-type-1-2">Pattern</label>
+                    <input type="radio" name="series-type-1" id="series-type-1-2" class="pattern-radio">
+                </div>
+
+                <div class="input-container input-predefined">
+                    <label for="cell-names">Cell definitions (separated by space)</label>
+                    <textarea id="cell-names" name="cell-names" disabled></textarea>
+                </div>
+                
+                <div class="input-container input-pattern" quota-num="1">
+                    <div class="series-1-1">
+                        <div class="input-container">
+                            <label for="pattern-1-name">Name:</label>
+                            <input type="text" id="pattern-1-name" name="name-1" disabled/>
+                        </div>
+                        <div class="input-container">
+                            <label for="pattern-1-start">Start:</label>
+                            <input type="number" id="pattern-1-start" name="start-1" disabled/>
+                        </div>
+                        <div class="input-container">
+                            <label for="pattern-1-end">End:</label>
+                            <input type="number" id="pattern-1-end" name="end-1" disabled/>
+                        </div>
+                        <div class="input-container">
+                            <label for="pattern-1-step">Step:</label>
+                            <input type="number" id="pattern-1-step" name="step-1" value="1" disabled/>
+                        </div>
+                    </div>
+                </div> 
+                <button id="add-pattern-1">Add Pattern</button>
+            </div>
+            <div class="definition" id="definition-2" quota-num="2">
+                <h3>Quota 2</h3>
+
+                <div class="input-container">
+                    <label for="name-2">Label:</label>
+                    <input type="text" id="name-2"/>
+                </div>
+
+                <div class="input-container">
+                    <label for="cellcount-2">Cell count:</label>
+                    <input type="number" id="cellcount-2"/>
+                </div>
+                
+                <div class="input-container">
+                    <label for="series-type-2-1">Predefined</label>
+                    <input type="radio" name="series-type-2" id="series-type-2-1" class="predefined-radio">
+
+                    <label for="series-type-2-2">Pattern</label>
+                    <input type="radio" name="series-type-2" id="series-type-2-2" class="pattern-radio">
+                </div>
+
+                <div class="input-container input-predefined">
+                    <label for="cell-names">Cell definitions (separated by space)</label>
+                    <textarea id="cell-names" name="cell-names" disabled></textarea>
+                </div>
+                
+                <div class="input-container input-pattern">
+                    <div class="input-container">
+                        <label for="pattern-2-name">Name:</label>
+                        <input type="text" id="pattern-2-name" name="name-2" disabled/>
+                    </div>
+
+                    <div class="input-container">
+                        <label for="pattern-2-start">Start:</label>
+                        <input type="number" id="pattern-2-start" name="start-2" disabled/>
+                    </div>
+                    <div class="input-container">
+                        <label for="pattern-2-end">End:</label>
+                        <input type="number" id="pattern-2-end" name="end-2" disabled/>
+                    </div>
+                    <div class="input-container">
+                        <label for="pattern-2-step">Step:</label>
+                        <input type="number" id="pattern-2-step" name="step-2" value="1" disabled/>
+                    </div>
+                </div>
+                <button id="add-pattern-2">Add Pattern</button>
+            </div> -->
+        </div>
+        <button id="add-definition">Add quota</button>
+        <button id="quota-generator">Generate quotas</button>
+
+        <table id="quota-container">
+        </table>
+        <script src="index-dequote.js"></script>
+    </body>
+</html>
