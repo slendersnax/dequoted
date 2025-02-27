@@ -1,23 +1,59 @@
+// quick 'n' dirty to avoid boilerplate
+function getElement(tag, id = "", classList = "", attributes = "") {
+    const el = document.createElement(tag);
+
+    if (id != "") {
+        el.id = id;
+    }
+
+    if (classList != "") {
+        el.className = classList;
+    }
+
+    if (attributes != "") {
+        let attributeList = JSON.parse(attributes);
+        let attributeKeys = Object.keys(attributeList);
+
+        for (let i = 0; i < attributeKeys.length; i ++) {
+            el.setAttribute(attributeKeys[i], attributeList[attributeKeys[i]]);
+        }
+    }   
+
+    return el;
+}
+
 class Pattern {
     constructor() {
-        this.el_container = document.createElement("div", { class: "pattern" });
+        this.el_container = getElement("div", "", "input-container input-pattern");
 
-        this.el_nameInput  = document.createElement("input", { type: "text", class: "name" });
-        this.el_startInput = document.createElement("input", { type: "number", class: "start" });
-        this.el_endInput   = document.createElement("input", { type: "number", class: "end" });
-        this.el_stepInput  = document.createElement("input", { type: "number", class: "step" });
+        this.el_labelName  = getElement("label");
+        this.el_labelStart = getElement("label");
+        this.el_labelEnd   = getElement("label");
+        this.el_labelStep  = getElement("label");
 
-        this.el_nameInput.disabled = true;
-        this.el_startInput.disabled = true;
-        this.el_endInput.disabled = true;
-        this.el_stepInput.disabled = true;
+        this.el_inputName  = getElement("input", "", "name");
+        this.el_inputStart = getElement("input", "", "start");
+        this.el_inputEnd   = getElement("input", "", "end");
+        this.el_inputStep  = getElement("input", "", "step", '{ "value": 1 }');
 
-        this.el_container.classList.add("pattern");
+        this.el_labelName.innerHTML  = "Name: ";
+        this.el_labelStart.innerHTML = "Start: ";
+        this.el_labelEnd.innerHTML   = "End: ";
+        this.el_labelStep.innerHTML  = "Step: ";
 
-        this.el_container.appendChild(this.el_nameInput);
-        this.el_container.appendChild(this.el_startInput);
-        this.el_container.appendChild(this.el_endInput);
-        this.el_container.appendChild(this.el_stepInput);
+        this.el_inputName.disabled  = true;
+        this.el_inputStart.disabled = true;
+        this.el_inputEnd.disabled   = true;
+        this.el_inputStep.disabled  = true;
+
+        this.el_container.appendChild(this.el_labelName);
+        this.el_container.appendChild(this.el_inputName);
+        this.el_container.appendChild(this.el_labelStart);
+        this.el_container.appendChild(this.el_inputStart);
+        this.el_container.appendChild(this.el_labelEnd);
+        this.el_container.appendChild(this.el_inputEnd);
+        this.el_container.appendChild(this.el_labelStep);
+        this.el_container.appendChild(this.el_inputStep);
     }
 
     getContainer() {
@@ -25,87 +61,93 @@ class Pattern {
     }
 }
 
-/*
-                <h3>Quota 1</h3>
-
-                <div class="input-container">
-                    <label for="name-1">Label:</label>
-                    <input type="text" id="name-1"/>
-                </div>
-
-                <div class="input-container">
-                    <label for="cellcount-1">Cell count:</label>
-                    <input type="number" id="cellcount-1"/>
-                </div>
-                
-                <div class="input-container">
-                    <label for="series-type-1-1">Predefined</label>
-                    <input type="radio" name="series-type-1" id="series-type-1-1" class="predefined-radio">
-
-                    <label for="series-type-1-2">Pattern</label>
-                    <input type="radio" name="series-type-1" id="series-type-1-2" class="pattern-radio">
-                </div>
-
-                <div class="input-container input-predefined">
-                    <label for="cell-names">Cell definitions (separated by space)</label>
-                    <textarea id="cell-names" name="cell-names" disabled></textarea>
-                </div>
-*/
-
 class QuotaDefinition {
     constructor(id) {
         this.id = id;
 
-        this.el_container = document.createElement("div");
+        this.el_container = getElement("div", "", "definition");
+        this.el_header = getElement("h3");
 
-        this.el_header = document.createElement("h3");
+        this.el_divLabelWrapper = getElement("div", "", "input-container");
+        this.el_labelLabel = getElement("label");
+        this.el_inputLabel = getElement("input", "", "label");
 
-        this.el_labelInput = document.createElement("input");
-        this.el_cellCountInput = document.createElement("input");
+        this.el_divCellCountWrapper = getElement("div", "", "input-container");
+        this.el_labelCellCount = getElement("label");
+        this.el_inputCellCount = getElement("input", "", "cellcount", '{ "value": 1 }');
 
-        this.el_predefinedRadio = document.createElement("input", { type: "radio", class: "predefined-radio", name: `marker-type-${this.id}`, id: `type-${this.id}-1` });
-        this.el_patternRadio = document.createElement("input", { type: "radio", class: "pattern-radio", name: `marker-type-${this.id}`, id: `type-${this.id}-2` });
+        this.el_divRadioWrapper = getElement("div", "", "input-container radio-container");
+        this.el_labelPredefined = getElement("label", "", "",  `{ "for": "type-${this.id}-1" }`);
+        this.el_radioPredefined = getElement("input", `type-${this.id}-1`, "predefined-radio");
+        this.el_labelPattern = getElement("label", "", "", `{ "for": "type-${this.id}-2" }`);
+        this.el_radioPattern = getElement("input", `type-${this.id}-2`, "pattern-radio");
 
-        this.el_predefinedLabel = document.createElement("label", { for: `type-${this.id}-1` });
-        this.el_patternLabel = document.createElement("label", { for: `type-${this.id}-2` });
-
-        this.el_cellNamesTextarea = document.createElement("textarea", { class: "marker-names" });
+        this.el_divCellNamesWrapper = getElement("div", "", "input-container input-predefined");
+        this.el_labelCellNames = getElement("label", "", "",  `{ "for": "type-${this.id}-1" }`);
+        this.el_textareaCellNames = getElement("textarea", "", "marker-names");
 
         this.el_pattern = new Pattern();
 
+        this.el_divLabelWrapper.appendChild(this.el_labelLabel);
+        this.el_divLabelWrapper.appendChild(this.el_inputLabel);
+
+        this.el_divCellCountWrapper.appendChild(this.el_labelCellCount);
+        this.el_divCellCountWrapper.appendChild(this.el_inputCellCount);
+
+        this.el_divRadioWrapper.appendChild(this.el_labelPredefined);
+        this.el_divRadioWrapper.appendChild(this.el_radioPredefined);
+        this.el_divRadioWrapper.appendChild(getElement("br"));
+        this.el_divRadioWrapper.appendChild(this.el_labelPattern);
+        this.el_divRadioWrapper.appendChild(this.el_radioPattern);
+
+        this.el_divCellNamesWrapper.appendChild(this.el_labelCellNames);
+        this.el_divCellNamesWrapper.appendChild(this.el_textareaCellNames);
+
         this.el_header.innerHTML = `Quota ${this.id}`;
-        this.el_cellNamesTextarea.disabled = true;
+        this.el_textareaCellNames.disabled = true;
 
-        this.el_labelInput.type = "text";
-        this.el_labelInput.className = "label";
+        this.el_labelLabel.innerHTML = "Label: ";
+        this.el_inputLabel.type = "text";
 
-        this.el_cellCountInput.type = "number";
-        this.el_cellCountInput.className = "cellcount";
+        this.el_labelCellCount.innerHTML = "Cell count: ";
+        this.el_inputCellCount.type = "number";
 
-        this.el_predefinedRadio.type = "radio";
-        this.el_predefinedRadio.className = "predefined-radio";
-        this.el_predefinedRadio.name = `marker-type-${this.id}`;
-        this.el_predefinedRadio.id = `type-${this.id}-1`;
+        this.el_radioPredefined.type = "radio";
+        this.el_radioPredefined.name = `marker-type-${this.id}`;
 
-        this.el_patternRadio.type = "radio";
-        this.el_patternRadio.className = "pattern-radio";
-        this.el_patternRadio.name = `marker-type-${this.id}`;
-        this.el_patternRadio.id = `type-${this.id}-2`;
+        this.el_radioPattern.type = "radio";
+        this.el_radioPattern.name = `marker-type-${this.id}`;
 
-        this.el_predefinedLabel.innerHTML = "Predefined";
-        this.el_predefinedLabel.setAttribute("for", `type-${this.id}-1`);
-        this.el_patternLabel.innerHTML = "Pattern";
-        this.el_patternLabel.setAttribute("for", `type-${this.id}-2`);
+        this.el_labelPredefined.innerHTML = "Predefined";
+        this.el_labelPattern.innerHTML = "Pattern";
+
+        this.el_labelCellNames.innerHTML = "Cell names: ";
 
         this.el_container.appendChild(this.el_header);
-        this.el_container.appendChild(this.el_labelInput);
-        this.el_container.appendChild(this.el_cellCountInput);
-        this.el_container.appendChild(this.el_predefinedLabel);
-        this.el_container.appendChild(this.el_predefinedRadio);
-        this.el_container.appendChild(this.el_patternLabel);
-        this.el_container.appendChild(this.el_patternRadio);
-        this.el_container.appendChild(this.el_cellNamesTextarea);
+        this.el_container.appendChild(this.el_divLabelWrapper);
+        this.el_container.appendChild(this.el_divCellCountWrapper);
+        this.el_container.appendChild(this.el_divRadioWrapper);
+        this.el_container.appendChild(this.el_divCellNamesWrapper);
         this.el_container.appendChild(this.el_pattern.getContainer());
+
+        const elref_container = this.el_container;
+
+        // this is the way that works, we can check why others didn't work later
+        this.el_container.querySelector(".predefined-radio").addEventListener("change", function() {
+            elref_container.querySelector(".input-predefined textarea").disabled = false;
+
+            elref_container.querySelectorAll(".input-pattern input").forEach(function(el_input, index) {
+                el_input.disabled = true;
+            });
+        });
+
+        this.el_container.querySelector(".pattern-radio").addEventListener("change", function() {
+            elref_container.querySelector(".input-predefined textarea").disabled = true;
+
+            elref_container.querySelectorAll(".input-pattern input").forEach(function(el_input, index) {
+                el_input.disabled = false;
+            });
+        });
     }
 
     getContainer() {
@@ -120,10 +162,7 @@ let quota_json = JSON.parse('[{"name" : "gender x age quota", "cellcount": 1, "i
 console.log(quota_json);
 
 const quotas = document.querySelectorAll("#quota-definitions .definition");
-const btn_generator = document.querySelector("#quota-generator");
-let quota_definitions = document.querySelectorAll(".definition").length;
-
-console.log(quota_definitions);
+const btn_generator = document.querySelectorAll(".quota-generator");
 
 let test_string = [
     {
@@ -141,65 +180,17 @@ let test_string = [
 console.log(test_string);
 console.log(JSON.stringify(test_string));
 
-for (let i = 0; i < quotas.length; i ++) {
-    // this only fires for radio buttons if they are selected, not unselected
-    quotas[i].querySelector(".predefined-radio").addEventListener("change", function() {
-        quotas[i].querySelector(".input-predefined textarea").disabled = false;
-
-        quotas[i].querySelectorAll(".input-pattern input").forEach(function(el_input, index) {
-            el_input.disabled = true;
-        });
+btn_generator.forEach(function(btn_generate, index) {
+    btn_generate.addEventListener("click", function() {
+        console.log("generate");
     });
-
-    quotas[i].querySelector(".pattern-radio").addEventListener("change", function() {
-        quotas[i].querySelector(".input-predefined textarea").disabled = true;
-
-        quotas[i].querySelectorAll(".input-pattern input").forEach(function(el_input, index) {
-            el_input.disabled = false;
-        });
-    });
-}
-
-// enables or disabled the predetermined / pattern inputs when page is loaded
-window.addEventListener("load", function() {
-    for (let i = 0; i < quotas.length; i ++) {
-    
-        if (quotas[i].querySelector(".predefined-radio").checked) {
-            quotas[i].querySelector(".input-predefined textarea").disabled = false;
-
-            quotas[i].querySelectorAll(".input-pattern input").forEach(function(el_input, index) {
-                el_input.disabled = true;
-            });
-        }
-
-        else if (quotas[i].querySelector(".pattern-radio").checked) {
-            quotas[i].querySelector(".input-predefined textarea").disabled = true;
-
-            quotas[i].querySelectorAll(".input-pattern input").forEach(function(el_input, index) {
-                el_input.disabled = false;
-            });
-        }
-    }
-
-    let el = document.createElement("div");
-    el.classList.add("artificial");
-
-    document.body.appendChild(el);
-
-    let elkid = document.createElement("span");
-    elkid.style.color = "red";
-    elkid.innerHTML = "ARTIFICAL SPAN";
-
-    el.appendChild(elkid);
 });
 
-btn_generator.addEventListener("click", function() {
-    console.log("generate");
-});
+document.querySelectorAll(".add-definition").forEach(function(btn_add, index) { 
+    btn_add.addEventListener("click", function () {
+        let newdef = new QuotaDefinition(nDefinitions);
+        document.querySelector("#quota-definitions").appendChild(newdef.getContainer());
 
-document.querySelector("#add-definition").addEventListener("click", function () {
-    let newdef = new QuotaDefinition(nDefinitions);
-    document.body.appendChild(newdef.getContainer());
-
-    nDefinitions ++;
+        nDefinitions ++;
+    });
 });
