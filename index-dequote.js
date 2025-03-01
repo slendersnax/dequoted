@@ -86,7 +86,13 @@ class QuotaDefinition {
         this.el_labelCellNames = getElement("label", "", "",  `{ "for": "type-${this.id}-1" }`);
         this.el_textareaCellNames = getElement("textarea", "", "marker-names");
 
-        this.el_pattern = new Pattern();
+        this.el_divPatternsWrapper = getElement("div");
+        this.el_patterns = []
+        this.el_patterns.push(new Pattern());
+        this.el_btnPatternCreator = getElement("button", "", "add-pattern");
+        this.el_btnPatternCreator2 = getElement("button", "", "add-pattern");
+
+        this.el_divPatternsWrapper.appendChild(this.el_patterns[0].getContainer());
 
         this.el_divLabelWrapper.appendChild(this.el_labelLabel);
         this.el_divLabelWrapper.appendChild(this.el_inputLabel);
@@ -123,14 +129,21 @@ class QuotaDefinition {
 
         this.el_labelCellNames.innerHTML = "Cell names: ";
 
+        this.el_btnPatternCreator.innerHTML = "add pattern";
+        this.el_btnPatternCreator2.innerHTML = "add pattern";
+
         this.el_container.appendChild(this.el_header);
         this.el_container.appendChild(this.el_divLabelWrapper);
         this.el_container.appendChild(this.el_divCellCountWrapper);
         this.el_container.appendChild(this.el_divRadioWrapper);
         this.el_container.appendChild(this.el_divCellNamesWrapper);
-        this.el_container.appendChild(this.el_pattern.getContainer());
+        this.el_container.appendChild(this.el_btnPatternCreator);
+        this.el_container.appendChild(this.el_divPatternsWrapper);
+        this.el_container.appendChild(this.el_btnPatternCreator2);
 
         const elref_container = this.el_container;
+        const elref_divPatternsWrapper = this.el_divPatternsWrapper;
+        const elref_patterns = this.el_patterns;
 
         // this is the way that works, we can check why others didn't work later
         this.el_container.querySelector(".predefined-radio").addEventListener("change", function() {
@@ -148,10 +161,24 @@ class QuotaDefinition {
                 el_input.disabled = false;
             });
         });
+
+        this.el_btnPatternCreator.addEventListener("click", function() {
+            elref_patterns.push(new Pattern());
+            elref_divPatternsWrapper.appendChild(elref_patterns.at(-1).getContainer());
+        });
+
+        this.el_btnPatternCreator2.addEventListener("click", function() {
+            elref_patterns.push(new Pattern());
+            elref_divPatternsWrapper.appendChild(elref_patterns.at(-1).getContainer());
+        });
     }
 
     getContainer() {
         return this.el_container;
+    }
+
+    getQuotaTable() {
+
     }
 }
 

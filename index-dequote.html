@@ -15,6 +15,7 @@
                 border: 0.5px solid #ccc;
                 width: 500px;
                 margin-bottom: 1em;
+                padding: 1em;
             }
 
             .definition > .input-container {
@@ -31,6 +32,10 @@
                 display: block;
             }
 
+            .definition .input-container.input-pattern {
+                margin-bottom: 0.5em;
+            }
+
             .definition .input-pattern input {
                 width: 5em;
             }
@@ -41,14 +46,25 @@
     <body>
         <button class="add-definition">Add quota</button>
         <button class="quota-generator">Generate quotas</button>
-        <div id="quota-definitions">
-            
-        </div>
+
+        <details>
+            <summary>Quotas</summary>
+            <div id="quota-definitions">
+                
+            </div>
+        </details>
+
+
         <button class="add-definition">Add quota</button>
         <button class="quota-generator">Generate quotas</button>
 
-        <table id="quota-container">
-        </table>
+
+        <details>
+            <summary>Table</summary>
+            <table id="quota-container">
+
+            </table>
+        </details>
         <script src="index-dequote.js"></script>
     </body>
 </html>
