@@ -20,6 +20,33 @@ quota-definitions {
 
                 button - add pattern
             }
+
+            button - add predefined or pattern
+        }
+    }
+
+    button - add definition
+}
+
+// Vue structure
+Component - quota definitions {
+    list of Component - quota definition {
+        Label,
+        Cell count,
+
+        Compononent - marker lists - contains multiple input groups {
+            Component - predefined { 
+                textarea with list of predefined markers
+            }
+
+            Component - pattern {
+                marker label / name - Component? - text input,
+                start - Component? - numeric input,
+                end - Component? - numeric input,
+                step - Component? - numeric input
+            }
+
+            button - add predefined or pattern
         }
     }
 

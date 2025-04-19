@@ -50,7 +50,7 @@
         <details>
             <summary>Quotas</summary>
             <div id="quota-definitions">
-                
+                {{ quotas }}
             </div>
         </details>
 
@@ -58,13 +58,56 @@
         <button class="add-definition">Add quota</button>
         <button class="quota-generator">Generate quotas</button>
 
-
         <details>
             <summary>Table</summary>
-            <table id="quota-container">
-
-            </table>
+            <div id="table-container">
+                {{ tables }}
+            </div>
         </details>
-        <script src="index-dequote.js"></script>
+
+        <ButtonCounter/>
+        <!-- <script src="index-dequote.js"></script> -->
+
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script>
+            const { createApp, ref, h } = Vue
+
+            // quotas
+            const quotasApp = createApp({
+                setup() {
+                    const quotas = ref("Hello Vue!");
+
+                    return {
+                        quotas
+                    }
+                }
+            });
+
+            quotasApp.mount("#quota-definitions");
+
+            // tables
+            const tablesApp = createApp({
+                setup() {
+                    const tables = ref("Hello Vue 2!");
+
+                    return {
+                        tables
+                    }
+                }
+            });
+
+            tablesApp.mount("#table-container");
+
+            // tables
+            const tablesApp = createApp({
+                setup() {
+                    const tables = ref("Hello Vue 2!");
+
+                    return {
+                        tables
+                    }
+                }
+            });
+        </script>
     </body>
 </html>
