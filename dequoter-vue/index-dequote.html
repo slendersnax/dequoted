@@ -65,12 +65,22 @@
             </div>
         </details>
 
-        <ButtonCounter/>
+        <div id="app"></div>
+
         <!-- <script src="index-dequote.js"></script> -->
 
-        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-        <script>
-            const { createApp, ref, h } = Vue
+        <script type="importmap">
+            {
+                "imports": {
+                    "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+                }
+            }
+        </script>
+        <script type="module">
+            import { createApp, ref, h } from "vue"
+            import MyComponent from "./test-component.js"
+
+            createApp(MyComponent).mount('#app')
 
             // quotas
             const quotasApp = createApp({
@@ -97,17 +107,6 @@
             });
 
             tablesApp.mount("#table-container");
-
-            // tables
-            const tablesApp = createApp({
-                setup() {
-                    const tables = ref("Hello Vue 2!");
-
-                    return {
-                        tables
-                    }
-                }
-            });
         </script>
     </body>
 </html>
