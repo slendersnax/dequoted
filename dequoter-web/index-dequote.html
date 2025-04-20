@@ -50,7 +50,7 @@
         <details>
             <summary>Quotas</summary>
             <div id="quota-definitions">
-                {{ quotas }}
+                
             </div>
         </details>
 
@@ -61,52 +61,12 @@
         <details>
             <summary>Table</summary>
             <div id="table-container">
-                {{ tables }}
+                
             </div>
         </details>
 
-        <div id="app"></div>
+        <!-- <quota-definiton sl_id="69"></quota-definiton> -->
 
-        <!-- <script src="index-dequote.js"></script> -->
-
-        <script type="importmap">
-            {
-                "imports": {
-                    "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
-                }
-            }
-        </script>
-        <script type="module">
-            import { createApp, ref, h } from "vue"
-            import MyComponent from "./test-component.js"
-
-            createApp(MyComponent).mount('#app')
-
-            // quotas
-            const quotasApp = createApp({
-                setup() {
-                    const quotas = ref("Hello Vue!");
-
-                    return {
-                        quotas
-                    }
-                }
-            });
-
-            quotasApp.mount("#quota-definitions");
-
-            // tables
-            const tablesApp = createApp({
-                setup() {
-                    const tables = ref("Hello Vue 2!");
-
-                    return {
-                        tables
-                    }
-                }
-            });
-
-            tablesApp.mount("#table-container");
-        </script>
+        <script src="index-dequote.js"></script>
     </body>
 </html>
