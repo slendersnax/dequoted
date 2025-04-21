@@ -4,7 +4,7 @@ class PredefinedMarker extends HTMLElement {
     }
 
     connectedCallback() {
-        const shadow = this.attachShadow({ mode: "closed" });
+        const shadow = this.attachShadow({ mode: "open" });
 
         shadow.innerHTML = `
         <style>
@@ -14,6 +14,12 @@ class PredefinedMarker extends HTMLElement {
         <div>
             <label for="predef-markers">predefined markers</label><textarea id="predef-markers"></textarea>
         </div>`;
+    }
+
+    get markerList() {
+        const shadow = this.shadowRoot;
+
+        return shadow.querySelector("#predef-markers").value.split(" ");
     }
 }
 
@@ -25,19 +31,49 @@ class PatternMarker extends HTMLElement {
     }
 
     connectedCallback() {
-        const shadow = this.attachShadow({ mode: "closed" });
+        const shadow = this.attachShadow({ mode: "open" });
 
         shadow.innerHTML = `
         <style>
-          
+            .pattern-container {
+                display: flex;
+            }
+
+            .pattern-container > * {
+                flex: 1;
+            }
         </style>
 
-        <div>
-            <label for="label">label</label><input type="text" id="label"/>
-            <label for="start">start</label><input type="number" id="start"/>
-            <label for="end">end</label><input type="number" id="end"/>
-            <label for="step">step</label><input type="number" id="step" value="1" />
+        <div class="pattern-container">
+            <div>
+                <label for="label">label</label><input type="text" id="label"/>
+            </div>
+            <div>
+                <label for="start">start</label><input type="number" id="start"/>
+            </div>
+            <div>
+                <label for="end">end</label><input type="number" id="end"/>
+            </div>
+            <div>
+                <label for="step">step</label><input type="number" id="step" value="1" />
+            </div>
         </div>`;
+    }
+
+    get markerList() {
+        const shadow = this.shadowRoot;
+        const markers = [];
+        
+        const markerName = shadow.querySelector("#label").value;
+        const start = shadow.querySelector("#start").valueAsNumber;
+        const end   = shadow.querySelector("#end").valueAsNumber;
+        const step  = shadow.querySelector("#step").valueAsNumber;
+
+        for(let i = start; i <= end; i += step) {
+            markers.push(`${markerName}_${i}`);
+        }
+
+        return markers;
     }
 }
 
@@ -71,35 +107,99 @@ class QuotaDefinition extends HTMLElement {
     It should run any required rendering.
     */
     connectedCallback() {
-        const shadow = this.attachShadow({ mode: "closed" });
+        const shadow = this.attachShadow({ mode: "open" });
         
         shadow.innerHTML = `
+            <style>
+                section {
+                    border-bottom: 1px solid #000;
+                }
+
+                .quota-wrapper {
+                    width: 100%;
+                    display: flex;
+                }
+
+                .quota-wrapper > * {
+                    flex: 1;
+                }
+            </style>
+
             <section>
-                <h3 id="title">Quota #${this.sl_id}</h3>
-                <div>
-                    <label for="name">name</label>
-                    <input type="text" id="name"/>
-                </div>
-                <div>
-                    <label for="cell-no">cell number</label>
-                    <input type="text" id="cell-no"/>
-                </div>
+                <h3 class="title">Quota #${this.sl_id}</h3>
 
-                <button id="predefined-adder">add predefined</button>
-                <button id="pattern-adder">add pattern</button>
+                <div class="quota-wrapper">
+                    <div>
+                        <div>
+                            <label for="name">name</label>
+                            <input type="text" id="name"/>
+                        </div>
+                        <div>
+                            <label for="cell-no">cell number</label>
+                            <input type="text" id="cell-no"/>
+                        </div>
 
-                <div id="marker-container">
+                        <button class="predefined-adder">add predefined</button>
+                        <button class="pattern-adder">add pattern</button>
+                        <button class="table-generator">generate quota table</button>
+
+                        <div class="marker-container">
+                        </div>
+                    </div>
+                    <table id="quota-table" border="1">
+                    </table>
                 </div>
             </section>
         `;
 
-        shadow.querySelector("#pattern-adder").addEventListener("click", function() {
-            shadow.querySelector("#marker-container").appendChild(document.createElement("pattern-marker"));
+        shadow.querySelector(".pattern-adder").addEventListener("click", function() {
+            const newEl = document.createElement("pattern-marker");
+            newEl.classList.add("marker");
+
+            shadow.querySelector(".marker-container").appendChild(newEl);
         });
 
-        shadow.querySelector("#predefined-adder").addEventListener("click", function() {
-            shadow.querySelector("#marker-container").appendChild(document.createElement("predefined-marker"));
+        shadow.querySelector(".predefined-adder").addEventListener("click", function() {
+            const newEl = document.createElement("predefined-marker");
+            newEl.classList.add("marker");
+            
+            shadow.querySelector(".marker-container").appendChild(newEl);
         });
+
+        const thisEl = this;
+
+        shadow.querySelector(".table-generator").addEventListener("click", function() {
+            thisEl.generateTable();
+        });
+    }
+
+    get markerList() {
+        const shadow = this.shadowRoot;
+        const markerElements = shadow.querySelectorAll(".marker");
+        const markers = [];
+
+        for (let i = 0; i < markerElements.length; i ++) {
+            markers.push(markerElements[i].markerList);
+        }
+
+        return markers;
+    }
+
+    generateTable() {
+        const shadow = this.shadowRoot;
+        const quotaTable  = shadow.querySelector("#quota-table");
+        const quotaName   = shadow.querySelector("#name").value;
+        const quotaCellNo = shadow.querySelector("#cell-no").value;
+        const markers = this.markerList;
+        let row = "";
+
+        quotaTable.replaceChildren(); // deletes all children
+
+        for (let i = 0; i < markers.length; i ++) {
+            row += "<th>#</th>";
+        }
+
+        quotaTable.innerHTML = `<thead><tr><th># cells:${quotaCellNo} = ${quotaName}</th>${row}</tr></thead>`;
     }
 }
 
