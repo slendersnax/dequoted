@@ -185,6 +185,19 @@ class QuotaDefinition extends HTMLElement {
         return markers;
     }
 
+    generateLines(quotaTable, arrays, currentArray, line) {
+        const host = this;
+
+        for(let i = 0; i < arrays[currentArray].length; i ++) {
+            if (currentArray < arrays.length - 1) {
+                host.generateLines(quotaTable, arrays, currentArray + 1, `${line}<td>${arrays[currentArray][i]}</td>`);
+            }
+            else {
+                quotaTable.innerHTML += `<tr>${line}<td>${arrays[currentArray][i]}</td><td>999</td></tr>`;
+            }
+        }
+    }
+
     generateTable() {
         const shadow = this.shadowRoot;
         const quotaTable  = shadow.querySelector("#quota-table");
@@ -195,11 +208,13 @@ class QuotaDefinition extends HTMLElement {
 
         quotaTable.replaceChildren(); // deletes all children
 
-        for (let i = 0; i < markers.length; i ++) {
+        for (let i = 0; i < markers.length - 1; i ++) {
             row += "<th>#</th>";
         }
 
-        quotaTable.innerHTML = `<thead><tr><th># cells:${quotaCellNo} = ${quotaName}</th>${row}</tr></thead>`;
+        quotaTable.innerHTML = `<thead><tr><th># cells:${quotaCellNo} = ${quotaName}</th>${row}<th></th></tr></thead>`;
+
+        this.generateLines(quotaTable, markers, 0, "");
     }
 }
 
