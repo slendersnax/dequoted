@@ -20,6 +20,12 @@ class PredefinedMarker extends HTMLElement {
         </div>`;
     }
 
+    set predefined(predefinedList) {
+        const shadow = this.shadowRoot;
+
+        shadow.querySelector("#predef-markers").value = predefinedList;
+    }
+
     get markerList() {
         const shadow = this.shadowRoot;
 
@@ -48,10 +54,21 @@ class PatternMarker extends HTMLElement {
 
         <div class="pattern-container">
             <label for="label">label</label><input type="text" id="label"/>
+            <label for="separator">separator</label><input type="text" id="separator" value="_"/>
             <label for="start">start</label><input type="number" id="start"/>
             <label for="end">end</label><input type="number" id="end"/>
             <label for="step">step</label><input type="number" id="step" value="1" />
         </div>`;
+    }
+
+    set pattern(patternObj) {
+        const shadow = this.shadowRoot;
+
+        shadow.querySelector("#label").value     = patternObj.label;
+        shadow.querySelector("#separator").value = patternObj.separator;
+        shadow.querySelector("#start").value     = patternObj.start;
+        shadow.querySelector("#end").value       = patternObj.end;
+        shadow.querySelector("#step").value      = patternObj.step;
     }
 
     get markerList() {
@@ -59,12 +76,13 @@ class PatternMarker extends HTMLElement {
         const markers = [];
         
         const markerName = shadow.querySelector("#label").value;
+        const separator  = shadow.querySelector("#separator").value;
         const start = shadow.querySelector("#start").valueAsNumber;
         const end   = shadow.querySelector("#end").valueAsNumber;
         const step  = shadow.querySelector("#step").valueAsNumber;
 
         for(let i = start; i <= end; i += step) {
-            markers.push(`${markerName}_${i}`);
+            markers.push(`${markerName}${separator}${i}`);
         }
 
         return markers;
@@ -156,25 +174,45 @@ class QuotaDefinition extends HTMLElement {
             </section>
         `;
 
-        shadow.querySelector(".pattern-adder").addEventListener("click", function() {
-            const newEl = document.createElement("pattern-marker");
-            newEl.classList.add("marker");
+        const host = this;
 
-            shadow.querySelector(".marker-container").appendChild(newEl);
+        shadow.querySelector(".pattern-adder").addEventListener("click", function() {
+            host.addNewPattern(null);
         });
 
         shadow.querySelector(".predefined-adder").addEventListener("click", function() {
-            const newEl = document.createElement("predefined-marker");
-            newEl.classList.add("marker");
-            
-            shadow.querySelector(".marker-container").appendChild(newEl);
+            host.addNewPredefined(null);
         });
-
-        const thisEl = this;
 
         shadow.querySelector(".table-generator").addEventListener("click", function() {
-            thisEl.generateTable();
+            host.generateTable();
         });
+    }
+
+    addNewPredefined(predefinedMarkers) {
+        const shadow = this.shadowRoot;
+
+        const newEl = document.createElement("predefined-marker");
+        newEl.classList.add("marker");
+            
+        shadow.querySelector(".marker-container").appendChild(newEl);
+
+        if (predefinedMarkers != null) {
+            newEl.predefined = predefinedMarkers;
+        }
+    }
+
+    addNewPattern(patternMarker) {
+        const shadow = this.shadowRoot;
+
+        const newEl = document.createElement("pattern-marker");
+        newEl.classList.add("marker");
+
+        shadow.querySelector(".marker-container").appendChild(newEl);
+
+        if (patternMarker != null) {
+            newEl.pattern = patternMarker;
+        }
     }
 
     get markerList() {
@@ -221,6 +259,30 @@ class QuotaDefinition extends HTMLElement {
 
         quotaTable.innerHTML = `<thead><tr><th># cells:${quotaCellNo} = ${quotaName}</th>${headerRow}<th></th></tr></thead><tbody>${this.tableInner}</tbody>`;
     }
+}
+
+let quota_json = JSON.parse('[{"name" : "gender x age quota", "cellcount": 1, "items": [{"gender": 2}, {"age" : [2, 8]}]}, {"name" : "region quota", "cellcount": 1, "items": [{"region" : 5}]}, {"name" : "country x csp x cell quota", "cellcount": 2, "items": [{"country": 4}, {"csp" : [0, 9, 3]}, ["cell_1", "cell_2", "cell_99"]]}]');
+
+console.log(quota_json);
+
+let test_string = [
+    {
+        "one": 1, 
+        "two": 2,
+        "items": [{"three": 2}, {"eight" : [2, 4]}]
+    },
+    {
+        "one": 1, 
+        "two": 2,
+        "items": [{"three": 2}, {"eight" : [2, 4]}]
+    }
+];
+
+console.log(test_string);
+console.log(JSON.stringify(test_string));
+
+function generateQuotasFromJSON(jsonstring) {
+    
 }
 
 customElements.define("quota-definiton", QuotaDefinition);
