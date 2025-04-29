@@ -44,12 +44,26 @@
                 text-align: center;
             }
 
+            #json-section {
+                display: grid;
+                grid-template-columns: 50% 50%;
+            }
+
         </style>
 
         <title>Dequoter</title>
     </head>
     <body>
         <h1>Quotas</h1>
+
+        <section id="json-section">
+            <textarea id="json-source"></textarea>
+            <textarea id="json-result"></textarea>
+
+            <button id="generate-from-json">generate from JSON</button>
+            <button id="generate-to-json">generate JSON from quotas</button>
+        </section>
+
         <button class="add-definition">Add quota</button>
 
         <div id="quota-definitions">

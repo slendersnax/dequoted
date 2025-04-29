@@ -31,6 +31,12 @@ class PredefinedMarker extends HTMLElement {
 
         return shadow.querySelector("#predef-markers").value.split(" ");
     }
+
+    getObj() {
+        const shadow = this.shadowRoot;
+
+        return shadow.querySelector("#predef-markers").value.split(" ");
+    }
 }
 
 customElements.define("predefined-marker", PredefinedMarker);
@@ -86,6 +92,18 @@ class PatternMarker extends HTMLElement {
         }
 
         return markers;
+    }
+
+    getObj() {
+        const shadow = this.shadowRoot;
+
+        return {
+            label: shadow.querySelector("#label").value,
+            separator: shadow.querySelector("#separator").value,
+            start: shadow.querySelector("#start").value,
+            end: shadow.querySelector("#end").value,
+            step: shadow.querySelector("#step").value
+        };
     }
 }
 
@@ -259,7 +277,26 @@ class QuotaDefinition extends HTMLElement {
 
         quotaTable.innerHTML = `<thead><tr><th># cells:${quotaCellNo} = ${quotaName}</th>${headerRow}<th></th></tr></thead><tbody>${this.tableInner}</tbody>`;
     }
+
+    getJSON() {
+        const shadow = this.shadowRoot;
+
+        const markerElements = shadow.querySelectorAll(".marker");
+        const marker_arrs = [];
+
+        for (let i = 0; i < markerElements.length; i ++) {
+            marker_arrs.push(markerElements[i].getObj());
+        }
+
+        return JSON.stringify({
+            name: shadow.querySelector("#name").value,
+            cell_number: shadow.querySelector("#cell-no").value,
+            markers: marker_arrs
+        });
+    }
 }
+
+customElements.define("quota-definiton", QuotaDefinition);
 
 let quota_json = JSON.parse('[{"name" : "gender x age quota", "cellcount": 1, "items": [{"gender": 2}, {"age" : [2, 8]}]}, {"name" : "region quota", "cellcount": 1, "items": [{"region" : 5}]}, {"name" : "country x csp x cell quota", "cellcount": 2, "items": [{"country": 4}, {"csp" : [0, 9, 3]}, ["cell_1", "cell_2", "cell_99"]]}]');
 
@@ -282,10 +319,14 @@ console.log(test_string);
 console.log(JSON.stringify(test_string));
 
 function generateQuotasFromJSON(jsonstring) {
-    
+    const quotaArr = JSON.parse(jsonstring);
+
+
 }
 
-customElements.define("quota-definiton", QuotaDefinition);
+function generateJSONFromQuotas() {
+    const quotas = document.getElementsByTagName("quota-definition")
+}
 
 let nCurrentQuotas = 0;
 
