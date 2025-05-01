@@ -1,4 +1,7 @@
+// globa :)
 let nCurrentQuotas = 0;
+
+// custom elements
 
 class PredefinedMarker extends HTMLElement {
     constructor() {
@@ -145,6 +148,11 @@ class QuotaDefinition extends HTMLElement {
         
         shadow.innerHTML = `
             <style>
+                summary {
+                    font-size: 1.3em;
+                    font-weight: bold;
+                }
+
                 section {
                     border-bottom: 1px solid #000;
                 }
@@ -169,30 +177,33 @@ class QuotaDefinition extends HTMLElement {
                 }
             </style>
 
-            <section>
-                <h3 class="title">Quota #${this.sl_id}</h3>
+            <details>
+                <summary>Quota #${this.sl_id}</summary>
+                <section>
+                    <div class="quota-wrapper">
+                        <div class="quota-attributes">
+                            <div class="title-attributes">
+                                <label for="name">name</label><input type="text" id="name"/>
 
-                <div class="quota-wrapper">
-                    <div class="quota-attributes">
-                        <div class="title-attributes">
-                            <label for="name">name</label><input type="text" id="name"/>
+                                <label for="cell-no">cell number</label><input type="text" id="cell-no"/>
+                            </div>
 
-                            <label for="cell-no">cell number</label><input type="text" id="cell-no"/>
+                            <button class="predefined-adder">add predefined</button>
+                            <button class="pattern-adder">add pattern</button>
+                            <button class="table-generator">generate quota table</button>
+
+                            <div class="marker-container">
+                            </div>
                         </div>
-
-                        <button class="predefined-adder">add predefined</button>
-                        <button class="pattern-adder">add pattern</button>
-                        <button class="table-generator">generate quota table</button>
-
-                        <div class="marker-container">
+                        <div class="table-wrapper">
+                            <table id="quota-table" border="1">
+                            </table>
                         </div>
                     </div>
-                    <div class="table-wrapper">
-                        <table id="quota-table" border="1">
-                        </table>
-                    </div>
-                </div>
-            </section>
+                </section>
+            </details>
+            <button class="add-definition">add quota after this</button>
+            <button class="delete">delete this quota</button>
         `;
 
         const host = this;
@@ -207,6 +218,16 @@ class QuotaDefinition extends HTMLElement {
 
         shadow.querySelector(".table-generator").addEventListener("click", function() {
             host.generateTable();
+        });
+
+        shadow.querySelector(".add-definition").addEventListener("click", function() {
+            const newDef = getNewDefinition();
+
+            document.querySelector(`[sl_id='${host.sl_id}']`).after(newDef);
+        });
+
+        shadow.querySelector(".delete").addEventListener("click", function() {
+            host.remove();
         });
     }
 
@@ -318,20 +339,18 @@ class QuotaDefinition extends HTMLElement {
 
 customElements.define("quota-definiton", QuotaDefinition);
 
+// main() kinda
+
 function generateQuotasFromJSON() {
     document.querySelector("#quota-definitions").replaceChildren();
+    nCurrentQuotas = 0;
 
     const quotaArr = JSON.parse(document.querySelector("#json-source").value);
 
     for(let i = 0; i < quotaArr.length; i ++) {
-        nCurrentQuotas ++;
-
-        let newdef = document.createElement("quota-definiton");
-
-        document.querySelector("#quota-definitions").appendChild(newdef);
-
-        newdef.setAttribute("sl_id", `${nCurrentQuotas}`);
-        newdef.fillQuota(quotaArr[i].name, quotaArr[i].cell_number, quotaArr[i].markers);
+        const newDef = getNewDefinition();
+        document.querySelector("#quota-definitions").append(newDef);
+        newDef.fillQuota(quotaArr[i].name, quotaArr[i].cell_number, quotaArr[i].markers);
     }
 }
 
@@ -346,14 +365,18 @@ function generateJSONFromQuotas() {
     document.querySelector("#json-result").value = JSON.stringify(quotaArr);
 }
 
-document.querySelectorAll(".add-definition").forEach(function(btn_add, index) { 
-    btn_add.addEventListener("click", function () {
-        nCurrentQuotas ++;
+function getNewDefinition() {
+    nCurrentQuotas ++;
 
-        let newdef = document.createElement("quota-definiton");
-        newdef.setAttribute("sl_id", `${nCurrentQuotas}`);
-        document.querySelector("#quota-definitions").appendChild(newdef);
-    });
+    const newDef = document.createElement("quota-definiton");
+    newDef.setAttribute("sl_id", `${nCurrentQuotas}`);
+
+    return newDef;
+}
+
+document.querySelectorAll(".add-definition")[0].addEventListener("click", function () {
+    const newDef = getNewDefinition();
+    document.querySelector("#quota-definitions").prepend(newDef);
 });
 
 document.querySelector("#generate-from-json").addEventListener("click", generateQuotasFromJSON);

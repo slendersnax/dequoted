@@ -36,11 +36,16 @@
             }*/
 
             /* element styles */
-            body > button {
+            #main-container {
+                width: 90%;
+                margin: auto;
+            }
+
+            #main-container > button {
                 width: 100%;
             }
 
-            body > h1 {
+            #main-container > h1 {
                 text-align: center;
             }
 
@@ -51,26 +56,26 @@
 
         </style>
 
-        <title>Dequoter</title>
+        <title>dequoter</title>
     </head>
     <body>
-        <h1>Quotas</h1>
+        <article id="main-container">
+            <h1>dequoter</h1>
 
-        <section id="json-section">
-            <textarea id="json-source"></textarea>
-            <textarea id="json-result"></textarea>
+            <section id="json-section">
+                <textarea id="json-source"></textarea>
+                <textarea id="json-result"></textarea>
 
-            <button id="generate-from-json">generate quotas from JSON</button>
-            <button id="generate-to-json">generate JSON from quotas</button>
-        </section>
+                <button id="generate-from-json">generate quotas from JSON</button>
+                <button id="generate-to-json">generate JSON from quotas</button>
+            </section>
 
-        <button class="add-definition">Add quota</button>
+            <button class="add-definition">add quota at the start</button>
 
-        <div id="quota-definitions">
-            
-        </div>
-
-        <button class="add-definition">Add quota</button>
+            <div id="quota-definitions">
+                
+            </div>
+        </article>
 
         <script src="index-dequote.js" defer></script>
     </body>
