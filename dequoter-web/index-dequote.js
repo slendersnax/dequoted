@@ -1,3 +1,5 @@
+let nCurrentQuotas = 0;
+
 class PredefinedMarker extends HTMLElement {
     constructor() {
         super();
@@ -23,7 +25,7 @@ class PredefinedMarker extends HTMLElement {
     set predefined(predefinedList) {
         const shadow = this.shadowRoot;
 
-        shadow.querySelector("#predef-markers").value = predefinedList;
+        shadow.querySelector("#predef-markers").value = predefinedList.join(" ");
     }
 
     get markerList() {
@@ -87,6 +89,7 @@ class PatternMarker extends HTMLElement {
         const end   = shadow.querySelector("#end").valueAsNumber;
         const step  = shadow.querySelector("#step").valueAsNumber;
 
+        // TODO: TEST IF WORKS FROM BIG NUM -> SMALL NUM
         for(let i = start; i <= end; i += step) {
             markers.push(`${markerName}${separator}${i}`);
         }
@@ -233,6 +236,23 @@ class QuotaDefinition extends HTMLElement {
         }
     }
 
+    fillQuota(name, cell_number, markerArr) {
+        const shadow = this.shadowRoot;
+        const host = this;
+
+        shadow.querySelector("#name").value = name;
+        shadow.querySelector("#cell-no").value = cell_number;
+
+        for(let i = 0; i < markerArr.length; i ++) {
+            if (Array.isArray(markerArr[i])) {
+                host.addNewPredefined(markerArr[i]);
+            }
+            else {
+                host.addNewPattern(markerArr[i]);
+            }
+        }
+    } 
+
     get markerList() {
         const shadow = this.shadowRoot;
         const markerElements = shadow.querySelectorAll(".marker");
@@ -275,10 +295,10 @@ class QuotaDefinition extends HTMLElement {
 
         this.generateLines(quotaTable, markers, 0, "");
 
-        quotaTable.innerHTML = `<thead><tr><th># cells:${quotaCellNo} = ${quotaName}</th>${headerRow}<th></th></tr></thead><tbody>${this.tableInner}</tbody>`;
+        quotaTable.innerHTML = `<tr><td># cells:${quotaCellNo} = ${quotaName}</td>${headerRow}<td></td></tr>${this.tableInner}`;
     }
 
-    getJSON() {
+    getObj() {
         const shadow = this.shadowRoot;
 
         const markerElements = shadow.querySelectorAll(".marker");
@@ -288,47 +308,43 @@ class QuotaDefinition extends HTMLElement {
             marker_arrs.push(markerElements[i].getObj());
         }
 
-        return JSON.stringify({
+        return {
             name: shadow.querySelector("#name").value,
             cell_number: shadow.querySelector("#cell-no").value,
             markers: marker_arrs
-        });
+        };
     }
 }
 
 customElements.define("quota-definiton", QuotaDefinition);
 
-let quota_json = JSON.parse('[{"name" : "gender x age quota", "cellcount": 1, "items": [{"gender": 2}, {"age" : [2, 8]}]}, {"name" : "region quota", "cellcount": 1, "items": [{"region" : 5}]}, {"name" : "country x csp x cell quota", "cellcount": 2, "items": [{"country": 4}, {"csp" : [0, 9, 3]}, ["cell_1", "cell_2", "cell_99"]]}]');
+function generateQuotasFromJSON() {
+    document.querySelector("#quota-definitions").replaceChildren();
 
-console.log(quota_json);
+    const quotaArr = JSON.parse(document.querySelector("#json-source").value);
 
-let test_string = [
-    {
-        "one": 1, 
-        "two": 2,
-        "items": [{"three": 2}, {"eight" : [2, 4]}]
-    },
-    {
-        "one": 1, 
-        "two": 2,
-        "items": [{"three": 2}, {"eight" : [2, 4]}]
+    for(let i = 0; i < quotaArr.length; i ++) {
+        nCurrentQuotas ++;
+
+        let newdef = document.createElement("quota-definiton");
+
+        document.querySelector("#quota-definitions").appendChild(newdef);
+
+        newdef.setAttribute("sl_id", `${nCurrentQuotas}`);
+        newdef.fillQuota(quotaArr[i].name, quotaArr[i].cell_number, quotaArr[i].markers);
     }
-];
-
-console.log(test_string);
-console.log(JSON.stringify(test_string));
-
-function generateQuotasFromJSON(jsonstring) {
-    const quotaArr = JSON.parse(jsonstring);
-
-
 }
 
 function generateJSONFromQuotas() {
-    const quotas = document.getElementsByTagName("quota-definition")
-}
+    const quotas = document.querySelector("#quota-definitions").children;
+    const quotaArr = [];
 
-let nCurrentQuotas = 0;
+    for(let i = 0; i < quotas.length; i ++) {
+        quotaArr.push(quotas[i].getObj());
+    }
+
+    document.querySelector("#json-result").value = JSON.stringify(quotaArr);
+}
 
 document.querySelectorAll(".add-definition").forEach(function(btn_add, index) { 
     btn_add.addEventListener("click", function () {
@@ -339,3 +355,6 @@ document.querySelectorAll(".add-definition").forEach(function(btn_add, index) {
         document.querySelector("#quota-definitions").appendChild(newdef);
     });
 });
+
+document.querySelector("#generate-from-json").addEventListener("click", generateQuotasFromJSON);
+document.querySelector("#generate-to-json").addEventListener("click", generateJSONFromQuotas); 
