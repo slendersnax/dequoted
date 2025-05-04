@@ -148,13 +148,22 @@ class QuotaDefinition extends HTMLElement {
         
         shadow.innerHTML = `
             <style>
+                details {
+                    border: 2px solid var(--theme-blue);
+                    border-radius: 5px;
+                }
+
+                details > * {
+                    padding: 5px 10px;
+                }
+
                 summary {
                     font-size: 1.3em;
                     font-weight: bold;
                 }
 
-                section {
-                    border-bottom: 1px solid #000;
+                details[open] summary {
+                    border-bottom: 2px solid var(--theme-blue);
                 }
 
                 .quota-wrapper {
