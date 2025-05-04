@@ -1,2 +1,4 @@
 test*.json
 *.csv
+*.png
+temp.txt
