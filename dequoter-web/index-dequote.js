@@ -149,8 +149,9 @@ class QuotaDefinition extends HTMLElement {
         shadow.innerHTML = `
             <style>
                 details {
-                    border: 2px solid var(--theme-blue);
+                    border: 2px solid var(--theme-blue-border);
                     border-radius: 5px;
+                    margin: 4px;
                 }
 
                 details > * {
@@ -160,10 +161,21 @@ class QuotaDefinition extends HTMLElement {
                 summary {
                     font-size: 1.3em;
                     font-weight: bold;
+                    align-items: center;
+                }
+
+                summary > span:first-child {
+                    text-align: left;
+                }
+
+                summary > span:last-child {
+                    width: 88%;
+                    display: inline-block;
+                    text-align: right;
                 }
 
                 details[open] summary {
-                    border-bottom: 2px solid var(--theme-blue);
+                    border-bottom: 2px solid var(--theme-blue-border);
                 }
 
                 .quota-wrapper {
@@ -184,10 +196,46 @@ class QuotaDefinition extends HTMLElement {
 
                     grid-template-columns: 25% 40%;
                 }
+
+                button {
+                    background-color: var(--theme-blue-button);
+                    color: white;
+                    border: none;
+                    padding: 8px 12px;
+                    margin: 4px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.2s;
+                }
+
+                button:hover {
+                    background-color: var(--theme-blue-button-hover);
+                }
+
+                button.delete {
+                    background-color: red;
+                }
+
+                button.delete:hover {
+                    background-color: rgba(150, 0, 0, 1);
+                }
+
+                input, select, textarea {
+                    margin: 4px;
+                    padding: 6px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                }
             </style>
 
             <details>
-                <summary>Quota #${this.sl_id}</summary>
+                <summary>
+                    <span>Quota #${this.sl_id}</span>
+                    <span id="btn-holder">
+                        <button class="add-definition">add quota after this</button>
+                        <button class="delete">delete this quota</button>
+                    </span>
+                </summary>
                 <section>
                     <div class="quota-wrapper">
                         <div class="quota-attributes">
@@ -211,8 +259,6 @@ class QuotaDefinition extends HTMLElement {
                     </div>
                 </section>
             </details>
-            <button class="add-definition">add quota after this</button>
-            <button class="delete">delete this quota</button>
         `;
 
         const host = this;
