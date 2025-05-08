@@ -15,8 +15,12 @@ class PredefinedMarker extends HTMLElement {
         <style>
             .predefined-container {
                 display: grid;
+                align-items: center;
+                grid-template-columns: 30% 70%;
+            }
 
-                grid-template-columns: 25% 40%;
+            .predefined-container label {
+                margin-right: 4px;
             }
         </style>
 
@@ -59,16 +63,39 @@ class PatternMarker extends HTMLElement {
             .pattern-container {
                 display: grid;
 
-                grid-template-columns: 25% 40%;
+                grid-template-columns: 30% 70%;
+            }
+
+            .pattern-container > div {
+                display: flex;
+            }
+
+            .pattern-container > div {
+                margin-bottom: 4px;
+            }
+
+            div > input { 
+                flex: 1;
+                min-width: 0;
+            }
+
+            div > input:not(:last-child) {
+                margin-right: 4px;
             }
         </style>
 
         <div class="pattern-container">
-            <label for="label">label</label><input type="text" id="label"/>
-            <label for="separator">separator</label><input type="text" id="separator" value="_"/>
-            <label for="start">start</label><input type="number" id="start"/>
-            <label for="end">end</label><input type="number" id="end"/>
-            <label for="step">step</label><input type="number" id="step" value="1" />
+            <label>label, separator</label>
+            <div>
+                <input type="text" id="label"/>
+                <input type="text" id="separator" value="_"/>
+            </div>
+            <label>start, end, step</label>
+            <div>
+                <input type="number" id="start"/>
+                <input type="number" id="end"/>
+                <input type="number" id="step" value="1" />
+            </div>
         </div>`;
     }
 
@@ -232,8 +259,8 @@ class QuotaDefinition extends HTMLElement {
                 <summary>
                     <span>Quota #${this.sl_id}</span>
                     <span id="btn-holder">
-                        <button class="add-definition">add quota after this</button>
-                        <button class="delete">delete this quota</button>
+                        <button class="add-definition">add quota below</button>
+                        <button class="delete">delete</button>
                     </span>
                 </summary>
                 <section>
