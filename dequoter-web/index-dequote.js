@@ -17,6 +17,7 @@ class PredefinedMarker extends HTMLElement {
                 display: grid;
                 align-items: center;
                 grid-template-columns: 30% 70%;
+                margin-bottom: 4px;
             }
 
             .predefined-container label {
@@ -188,21 +189,33 @@ class QuotaDefinition extends HTMLElement {
                 summary {
                     font-size: 1.3em;
                     font-weight: bold;
+                    display: flex;
                     align-items: center;
                 }
 
+                summary span.caret {
+                    font-size: 1.3em;
+                    display: inline-block;
+                    transform-origin: center 18px;
+                }
+
                 summary > span:first-child {
+                    flex: 1;
                     text-align: left;
+                    cursor: pointer;
+                    user-select: none;
                 }
 
                 summary > span:last-child {
-                    width: 88%;
-                    display: inline-block;
                     text-align: right;
                 }
 
                 details[open] summary {
                     border-bottom: 2px solid var(--theme-blue-border);
+                }
+
+                details[open] summary span.caret {
+                    transform: rotate(90deg);
                 }
 
                 .quota-wrapper {
@@ -257,7 +270,10 @@ class QuotaDefinition extends HTMLElement {
 
             <details>
                 <summary>
-                    <span>Quota #${this.sl_id}</span>
+                    <span>
+                        <span class="caret">&#9656;</span>
+                        Quota #${this.sl_id}
+                    </span>
                     <span id="btn-holder">
                         <button class="add-definition">add quota below</button>
                         <button class="delete">delete</button>
