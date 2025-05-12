@@ -453,9 +453,9 @@ class QuotaDefinition extends HTMLElement {
                 <summary>
                     <span>
                         <span class="caret">&#9656;</span>
-                        Quota #${this.sl_id}
+                        <span>Quota #${this.sl_id}</span>
                     </span>
-                    <span id="btn-holder">
+                    <span class="btn-holder">
                         <button class="add-definition">add quota below</button>
                         <button class="delete">delete</button>
                     </span>
