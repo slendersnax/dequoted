@@ -6,6 +6,19 @@ let nCurrentQuotas = 0;
 class PredefinedMarker extends HTMLElement {
     constructor() {
         super();
+        this.sl_id = 1;
+    }
+
+    static get observedAttributes() {
+        return ["sl_id"];
+    }
+
+    attributeChangedCallback(property, oldValue, newValue) {
+        if (oldValue === newValue) {
+            return;
+        }
+
+        this[ property ] = newValue;
     }
 
     connectedCallback() {
@@ -13,6 +26,51 @@ class PredefinedMarker extends HTMLElement {
 
         shadow.innerHTML = `
         <style>
+            section {
+                border-bottom: 1px solid var(--theme-blue-border);
+            }
+
+            button {
+                background-color: var(--theme-blue-button);
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                margin: 4px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+
+            button:hover {
+                background-color: var(--theme-blue-button-hover);
+            }
+
+            button.delete {
+                background-color: red;
+            }
+
+            button.delete:hover {
+                background-color: rgba(150, 0, 0, 1);
+            }
+
+            .title {
+                padding: 4px 0px;
+                display: flex;
+            }
+
+            .title > span:first-child {
+                flex: 1;
+                text-align: left;
+            }
+
+            .title > span:last-child {
+                text-align: right;
+            }
+
+            .title button {
+                margin: 0px;
+            }
+
             .predefined-container {
                 display: grid;
                 align-items: center;
@@ -23,11 +81,40 @@ class PredefinedMarker extends HTMLElement {
             .predefined-container label {
                 margin-right: 4px;
             }
+
+            input, textarea {
+                margin: 4px;
+                padding: 6px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            textarea {
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
         </style>
 
-        <div class="predefined-container">
-            <label for="predef-markers">predefined markers</label><textarea id="predef-markers"></textarea>
-        </div>`;
+        <section>
+            <div class="title">
+                <span><b>markers ${this.sl_id}:</b> predefined</span>
+                <span id="btn-holder">
+                    <button class="add-definition">+ predefined</button>
+                    <button class="add-definition">+ pattern</button>
+                    <button class="delete">delete</button>
+                </span>
+            </div>
+            <div class="predefined-container">
+                <label for="predef-markers">predefined markers</label><textarea id="predef-markers"></textarea>
+            </div>
+        </section>`;
+
+        // otherwise the this will refer to the element in the .addEventListener
+        const host = this;
+
+        shadow.querySelector(".delete").addEventListener("click", function() {
+            host.remove();
+        });
     }
 
     set predefined(predefinedList) {
@@ -54,6 +141,19 @@ customElements.define("predefined-marker", PredefinedMarker);
 class PatternMarker extends HTMLElement {
     constructor() {
         super();
+        this.sl_id = 1;
+    }
+
+    static get observedAttributes() {
+        return ["sl_id"];
+    }
+
+    attributeChangedCallback(property, oldValue, newValue) {
+        if (oldValue === newValue) {
+            return;
+        }
+
+        this[ property ] = newValue;
     }
 
     connectedCallback() {
@@ -61,17 +161,62 @@ class PatternMarker extends HTMLElement {
 
         shadow.innerHTML = `
         <style>
+            section {
+                border-bottom: 1px solid var(--theme-blue-border);
+            }
+
             .pattern-container {
                 display: grid;
-
                 grid-template-columns: 30% 70%;
+                align-items: center;
+            }
+
+            button {
+                background-color: var(--theme-blue-button);
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                margin: 4px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+
+            button:hover {
+                background-color: var(--theme-blue-button-hover);
+            }
+
+            button.delete {
+                background-color: red;
+            }
+
+            button.delete:hover {
+                background-color: rgba(150, 0, 0, 1);
+            }
+
+            .title {
+                padding: 4px 0px;
+                display: flex;
+            }
+
+            .title > span:first-child {
+                flex: 1;
+                text-align: left;
+            }
+
+            .title > span:last-child {
+                text-align: right;
+            }
+
+            .title button {
+                margin: 0px;
             }
 
             .pattern-container > div {
                 display: flex;
             }
 
-            .pattern-container > div {
+            .pattern-container > div:last-child {
                 margin-bottom: 4px;
             }
 
@@ -83,21 +228,44 @@ class PatternMarker extends HTMLElement {
             div > input:not(:last-child) {
                 margin-right: 4px;
             }
+
+            input, textarea {
+                margin: 4px;
+                padding: 6px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
         </style>
 
-        <div class="pattern-container">
-            <label>label, separator</label>
-            <div>
-                <input type="text" id="label"/>
-                <input type="text" id="separator" value="_"/>
+        <section>
+            <div class="title">
+                <span><b>markers ${this.sl_id}:</b> pattern</span>
+                <span id="btn-holder">
+                    <button class="add-definition">+ predefined</button>
+                    <button class="add-definition">+ pattern</button>
+                    <button class="delete">delete</button>
+                </span>
             </div>
-            <label>start, end, step</label>
-            <div>
-                <input type="number" id="start"/>
-                <input type="number" id="end"/>
-                <input type="number" id="step" value="1" />
+            <div class="pattern-container">
+                <label>label, separator</label>
+                <div>
+                    <input type="text" id="label"/>
+                    <input type="text" id="separator" value="_"/>
+                </div>
+                <label>start, end, step</label>
+                <div>
+                    <input type="number" id="start"/>
+                    <input type="number" id="end"/>
+                    <input type="number" id="step" value="1" />
+                </div>
             </div>
-        </div>`;
+        </section>`;
+
+        const host = this;
+
+        shadow.querySelector(".delete").addEventListener("click", function() {
+            host.remove();
+        });
     }
 
     set pattern(patternObj) {
@@ -148,6 +316,7 @@ class QuotaDefinition extends HTMLElement {
         super();
         this.sl_id = 1;
         this.tableInner = "";
+        this.markerlists = 0;
     }
 
     static get observedAttributes() {
@@ -176,6 +345,36 @@ class QuotaDefinition extends HTMLElement {
         
         shadow.innerHTML = `
             <style>
+                button {
+                    background-color: var(--theme-blue-button);
+                    color: white;
+                    border: none;
+                    padding: 8px 12px;
+                    margin: 4px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.2s;
+                }
+
+                button:hover {
+                    background-color: var(--theme-blue-button-hover);
+                }
+
+                button.delete {
+                    background-color: red;
+                }
+
+                button.delete:hover {
+                    background-color: rgba(150, 0, 0, 1);
+                }
+
+                input, textarea {
+                    margin: 4px;
+                    padding: 6px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                }
+
                 details {
                     border: 2px solid var(--theme-blue-border);
                     border-radius: 5px;
@@ -210,6 +409,10 @@ class QuotaDefinition extends HTMLElement {
                     text-align: right;
                 }
 
+                summary button {
+                    margin: 0px;
+                }
+
                 details[open] summary {
                     border-bottom: 2px solid var(--theme-blue-border);
                 }
@@ -222,7 +425,6 @@ class QuotaDefinition extends HTMLElement {
                     width: 100%;
                     
                     display: grid;
-                    
                     grid-template-columns: 50% 50%;
                 }
 
@@ -234,37 +436,16 @@ class QuotaDefinition extends HTMLElement {
                 .quota-attributes .title-attributes {
                     display: grid;
 
-                    grid-template-columns: 25% 40%;
+                    grid-template-columns: 30% 70%;
+                    align-items: center;
                 }
 
-                button {
-                    background-color: var(--theme-blue-button);
-                    color: white;
-                    border: none;
-                    padding: 8px 12px;
-                    margin: 4px;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    transition: background-color 0.2s;
+                .quota-attributes button:first-of-type {
+                    margin-left: 0px;
                 }
 
-                button:hover {
-                    background-color: var(--theme-blue-button-hover);
-                }
-
-                button.delete {
-                    background-color: red;
-                }
-
-                button.delete:hover {
-                    background-color: rgba(150, 0, 0, 1);
-                }
-
-                input, select, textarea {
-                    margin: 4px;
-                    padding: 6px;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
+                .command-btns {
+                    display: flex;    
                 }
             </style>
 
@@ -285,12 +466,15 @@ class QuotaDefinition extends HTMLElement {
                             <div class="title-attributes">
                                 <label for="name">name</label><input type="text" id="name"/>
 
-                                <label for="cell-no">cell number</label><input type="text" id="cell-no"/>
+                                <label for="cell-no">cell number</label><input type="number" id="cell-no" value="1"/>
                             </div>
 
-                            <button class="predefined-adder">add predefined</button>
-                            <button class="pattern-adder">add pattern</button>
-                            <button class="table-generator">generate quota table</button>
+                            <div class="command-btns">
+                                <button class="predefined-adder">add predefined</button>
+                                <button class="pattern-adder">add pattern</button>
+                                <button class="table-generator">generate quota table</button>
+                                <button class="table-copy-btn">copy quota table</button>
+                            </div>
 
                             <div class="marker-container">
                             </div>
@@ -330,10 +514,13 @@ class QuotaDefinition extends HTMLElement {
     }
 
     addNewPredefined(predefinedMarkers) {
+        this.markerlists ++;
+
         const shadow = this.shadowRoot;
 
         const newEl = document.createElement("predefined-marker");
         newEl.classList.add("marker");
+        newEl.setAttribute("sl_id", `${this.markerlists}`);
             
         shadow.querySelector(".marker-container").appendChild(newEl);
 
@@ -343,10 +530,13 @@ class QuotaDefinition extends HTMLElement {
     }
 
     addNewPattern(patternMarker) {
+        this.markerlists ++;
+
         const shadow = this.shadowRoot;
 
         const newEl = document.createElement("pattern-marker");
         newEl.classList.add("marker");
+        newEl.setAttribute("sl_id", `${this.markerlists}`);
 
         shadow.querySelector(".marker-container").appendChild(newEl);
 
@@ -409,7 +599,7 @@ class QuotaDefinition extends HTMLElement {
         quotaTable.replaceChildren();
 
         for (let i = 0; i < markers.length - 1; i ++) {
-            headerRow += "<th>#</th>";
+            headerRow += "<td>#</td>";
         }
 
         this.generateLines(quotaTable, markers, 0, "");
