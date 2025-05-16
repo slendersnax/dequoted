@@ -87,8 +87,8 @@ class PredefinedMarker extends HTMLElement {
                 <div class="title">
                     <span><b>markers ${this.sl_id}:</b> predefined</span>
                     <span id="btn-holder">
-                        <button class="add-definition">+ predefined below</button>
-                        <button class="add-definition">+ pattern below</button>
+                        <button class="predefined-adder" title="add predefined marker list below">&#128221; below</button>
+                        <button class="pattern-adder" title="add pattern marker list below">&#128291; below</button>
                         <button class="delete">delete</button>
                     </span>
                 </div>
@@ -118,11 +118,33 @@ class PredefinedMarker extends HTMLElement {
     }
 
     connectedCallback() {
-        // otherwise the this in this.remove() would refer to the .delete element :)
+        // otherwise the this in this.remove() would refer to the element that was query selected :)
         const host = this;
 
         this.shadowRoot.querySelector(".delete").addEventListener("click", function() {
             host.remove();
+        });
+
+        this.shadowRoot.querySelector(".predefined-adder").addEventListener("click", function() {
+            console.log("requested markers");
+
+            const markerAddEvent = new CustomEvent("request-markers", {
+                bubbles: true,
+                detail: { type: "predefined", after: host.sl_id },
+            });
+
+            host.dispatchEvent(markerAddEvent);
+        });
+
+        this.shadowRoot.querySelector(".pattern-adder").addEventListener("click", function() {
+            console.log("requested markers");
+
+            const markerAddEvent = new CustomEvent("request-markers", {
+                bubbles: true,
+                detail: { type: "pattern", after: host.sl_id },
+            });
+
+            host.dispatchEvent(markerAddEvent);
         });
     }
 
@@ -232,8 +254,8 @@ class PatternMarker extends HTMLElement {
                 <div class="title">
                     <span><b>markers ${this.sl_id}:</b> pattern</span>
                     <span id="btn-holder">
-                        <button class="add-definition">+ predefined below</button>
-                        <button class="add-definition">+ pattern below</button>
+                        <button class="predefined-adder" title="add predefined marker list below">&#128221; below</button>
+                        <button class="pattern-adder" title="add pattern marker list below">&#128291; below</button>
                         <button class="delete">delete</button>
                     </span>
                 </div>
@@ -277,6 +299,28 @@ class PatternMarker extends HTMLElement {
 
         this.shadowRoot.querySelector(".delete").addEventListener("click", function() {
             host.remove();
+        });
+
+        this.shadowRoot.querySelector(".predefined-adder").addEventListener("click", function() {
+            console.log("requested markers");
+
+            const markerAddEvent = new CustomEvent("request-markers", {
+                bubbles: true,
+                detail: { type: "predefined", after: host.sl_id },
+            });
+
+            host.dispatchEvent(markerAddEvent);
+        });
+
+        this.shadowRoot.querySelector(".pattern-adder").addEventListener("click", function() {
+            console.log("requested markers");
+
+            const markerAddEvent = new CustomEvent("request-markers", {
+                bubbles: true,
+                detail: { type: "pattern", after: host.sl_id },
+            });
+
+            host.dispatchEvent(markerAddEvent);
         });
     }
 
@@ -361,6 +405,7 @@ class QuotaDefinition extends HTMLElement {
                     }
 
                     details {
+                        background: rgba(50, 100, 205, 0.1);
                         border: 2px solid var(--theme-blue-border);
                         border-radius: 5px;
                         margin: 4px;
@@ -418,19 +463,38 @@ class QuotaDefinition extends HTMLElement {
                         overflow: scroll;
                     }
 
-                    .quota-attributes .title-attributes {
+                    .quota-wrapper .quota-attributes .title-attributes {
                         display: grid;
 
                         grid-template-columns: 30% 70%;
                         align-items: center;
                     }
 
-                    .quota-attributes button:first-of-type {
+                    .quota-wrapper .quota-attributes button:first-of-type {
                         margin-left: 0px;
                     }
 
-                    .command-btns {
+                    .quota-wrapper .command-btns {
                         display: flex;    
+                    }
+
+                    .table-wrapper {
+                        display: flex;
+                        justify-content: space-around;
+                    }
+
+                    .table-wrapper table {
+                        background-color: #fcfcfc;
+                        border: 0.5px solid var(--theme-blue-border);
+                        border-collapse: collapse;
+                    }
+
+                    .table-wrapper table * {
+                        border: 0.5px solid var(--theme-blue-border);
+                    }
+
+                    table tr:nth-child(even) {
+                        background-color: #f1f1f1;
                     }
                 </style>
 
@@ -455,9 +519,9 @@ class QuotaDefinition extends HTMLElement {
                                 </div>
 
                                 <div class="command-btns">
-                                    <button class="predefined-adder">+ predefined at the start</button>
-                                    <button class="pattern-adder">+ pattern at the start</button>
-                                    <button class="table-generator">generate quota table</button>
+                                    <button class="predefined-adder" title="add predefined marker list at the start">&#128221; predefined start</button>
+                                    <button class="pattern-adder" title="add pattern marker list at the start">&#128291; pattern start</button>
+                                    <button class="table-generator">&#9881; generate table</button>
                                     <button class="table-copy-btn">copy quota table</button>
                                 </div>
 
@@ -465,7 +529,7 @@ class QuotaDefinition extends HTMLElement {
                                 </div>
                             </div>
                             <div class="table-wrapper">
-                                <table id="quota-table" border="1">
+                                <table id="quota-table">
                                 </table>
                             </div>
                         </div>
@@ -506,11 +570,15 @@ class QuotaDefinition extends HTMLElement {
         const host = this;
 
         this.shadowRoot.querySelector(".pattern-adder").addEventListener("click", function() {
-            host.addNewPattern(null);
+            const newEl = host.getNewPattern(null);
+
+            host.shadowRoot.querySelector(".marker-container").prepend(newEl);
         });
 
         this.shadowRoot.querySelector(".predefined-adder").addEventListener("click", function() {
-            host.addNewPredefined(null);
+            const newEl = host.getNewPredefined(null);
+
+            host.shadowRoot.querySelector(".marker-container").prepend(newEl);
         });
 
         this.shadowRoot.querySelector(".table-generator").addEventListener("click", function() {
@@ -526,34 +594,47 @@ class QuotaDefinition extends HTMLElement {
         this.shadowRoot.querySelector(".delete").addEventListener("click", function() {
             host.remove();
         });
+
+        this.shadowRoot.addEventListener("request-markers", function(e) {
+            let newEl;
+
+            if (e.detail.type == "predefined") {
+                newEl = host.getNewPredefined(null);
+            }
+            else {
+                newEl = host.getNewPattern(null);
+            }
+
+            host.shadowRoot.querySelector(`[sl_id='${e.detail.after}']`).after(newEl);
+        });
     }
 
-    addNewPredefined(predefinedMarkers) {
+    getNewPredefined(predefinedMarkers) {
         this.markerlists ++;
 
         const newEl = document.createElement("sl-predefined-marker");
         newEl.classList.add("marker");
         newEl.setAttribute("sl_id", `${this.markerlists}`);
-            
-        this.shadowRoot.querySelector(".marker-container").prepend(newEl);
 
         if (predefinedMarkers != null) {
             newEl.predefined = predefinedMarkers;
         }
+
+        return newEl;
     }
 
-    addNewPattern(patternMarker) {
+    getNewPattern(patternMarker) {
         this.markerlists ++;
 
         const newEl = document.createElement("sl-pattern-marker");
         newEl.classList.add("marker");
         newEl.setAttribute("sl_id", `${this.markerlists}`);
 
-        this.shadowRoot.querySelector(".marker-container").prepend(newEl);
-
         if (patternMarker != null) {
             newEl.pattern = patternMarker;
         }
+
+        return newEl;
     }
 
     fillQuota(name, cell_number, markerArr) {
@@ -563,12 +644,16 @@ class QuotaDefinition extends HTMLElement {
         this.shadowRoot.querySelector("#cell-no").value = cell_number;
 
         for(let i = 0; i < markerArr.length; i ++) {
+            let newEl;
+
             if (Array.isArray(markerArr[i])) {
-                this.addNewPredefined(markerArr[i]);
+                newEl = this.getNewPredefined(markerArr[i]);
             }
             else {
-                this.addNewPattern(markerArr[i]);
+                newEl = this.getNewPattern(markerArr[i]);
             }
+
+            this.shadowRoot.querySelector(".marker-container").appendChild(newEl);
         }
     } 
 
@@ -670,9 +755,14 @@ function getNewDefinition() {
     return newDef;
 }
 
-document.querySelectorAll(".add-definition")[0].addEventListener("click", function () {
+document.querySelector(".add-definition-start").addEventListener("click", function () {
     const newDef = getNewDefinition();
     document.querySelector("#quota-definitions").prepend(newDef);
+});
+
+document.querySelector(".add-definition-end").addEventListener("click", function () {
+    const newDef = getNewDefinition();
+    document.querySelector("#quota-definitions").appendChild(newDef);
 });
 
 document.querySelector("#generate-from-json").addEventListener("click", generateQuotasFromJSON);

@@ -93,8 +93,16 @@
             #json-section {
                 display: grid;
                 grid-template-columns: 50% 50%;
+                border-bottom: 2px solid var(--theme-blue-border);
             }
 
+            #quota-adders {
+                display: flex;
+            }
+
+            #quota-adders > * {
+                flex: 1;
+            }
         </style>
 
         <title>dequoter</title>
@@ -111,7 +119,11 @@
                 <button id="generate-to-json">generate JSON from quotas</button>
             </section>
 
-            <button class="add-definition">add quota at the start</button>
+
+            <div id="quota-adders">
+                <button class="add-definition-start">add quota at the start</button>
+                <button class="add-definition-end">add quota at the end</button>
+            </div>
 
             <div id="quota-definitions">
                 
