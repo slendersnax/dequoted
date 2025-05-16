@@ -621,6 +621,18 @@ class QuotaDefinition extends HTMLElement {
             host.generateTable();
         });
 
+        this.shadowRoot.querySelector(".table-copy-btn").addEventListener("click", function() {
+            const quotaTable = host.shadowRoot.querySelector("#quota-table");
+   
+            let range = document.createRange();  
+            range.selectNode(quotaTable);
+            window.getSelection().addRange(range);
+
+            document.execCommand("copy");
+
+            alert(`Table ${host.sl_id} has been copied to the clipboard.`);
+        });
+
         this.shadowRoot.querySelector(".add-definition").addEventListener("click", function() {
             const newDef = getNewDefinition();
 
