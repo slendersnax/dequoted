@@ -28,7 +28,7 @@ You can generate JSON from the existing quotas and you can generate quotas from 
 
 #### JSON structure / example
 
-`
+```
 [
     {
         "name":"gender x age",
@@ -47,7 +47,7 @@ You can generate JSON from the existing quotas and you can generate quotas from 
         ]
     }
 ]
-`
+```
 
 This JSON code will create the following setup:
 
