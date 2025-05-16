@@ -363,11 +363,14 @@ class PatternMarker extends HTMLElement {
 customElements.define("sl-pattern-marker", PatternMarker);
 
 class QuotaDefinition extends HTMLElement {
+    #tableInner = "";
+    #markerlists = 0;
+
     constructor() {
         super();
         this.sl_id = 1;
-        this.tableInner = "";
-        this.markerlists = 0;
+        this.#tableInner = "";
+        this.#markerlists = 0;
 
         if (!this.shadowRoot) {
             this.attachShadow({ mode: "open" });
@@ -460,6 +463,13 @@ class QuotaDefinition extends HTMLElement {
 
                     .quota-wrapper > * {
                         max-height: 400px;
+                    }
+
+                    .quota-wrapper .quota-attributes {
+                        overflow: hidden;
+                    }
+
+                    .quota-wrapper .table-wrapper {
                         overflow: scroll;
                     }
 
@@ -474,8 +484,17 @@ class QuotaDefinition extends HTMLElement {
                         margin-left: 0px;
                     }
 
+                    .quota-wrapper .quota-attributes .marker-container {
+                        overflow: scroll;
+                        max-height: 200px;
+                    }
+
                     .quota-wrapper .command-btns {
                         display: flex;    
+                    }
+
+                    .quota-wrapper .command-btns > * {
+                        flex: 1;
                     }
 
                     .table-wrapper {
@@ -519,10 +538,15 @@ class QuotaDefinition extends HTMLElement {
                                 </div>
 
                                 <div class="command-btns">
-                                    <button class="predefined-adder" title="add predefined marker list at the start">&#128221; predefined start</button>
-                                    <button class="pattern-adder" title="add pattern marker list at the start">&#128291; pattern start</button>
                                     <button class="table-generator">&#9881; generate table</button>
                                     <button class="table-copy-btn">copy quota table</button>
+                                </div>
+
+                                <div class="command-btns">
+                                    <button class="predefined-adder" title="add predefined marker list at the start">+ &#128221; start</button>
+                                    <button class="predefined-adder" title="add predefined marker list at the end">+ &#128221; end</button>
+                                    <button class="pattern-adder" title="add pattern marker list at the start">+ &#128291; start</button>
+                                    <button class="pattern-adder" title="add pattern marker list at the end">+ &#128291; end</button>
                                 </div>
 
                                 <div class="marker-container">
@@ -569,16 +593,28 @@ class QuotaDefinition extends HTMLElement {
     connectedCallback() {
         const host = this;
 
-        this.shadowRoot.querySelector(".pattern-adder").addEventListener("click", function() {
+        this.shadowRoot.querySelectorAll(".pattern-adder")[0].addEventListener("click", function() {
             const newEl = host.getNewPattern(null);
 
             host.shadowRoot.querySelector(".marker-container").prepend(newEl);
         });
 
-        this.shadowRoot.querySelector(".predefined-adder").addEventListener("click", function() {
+        this.shadowRoot.querySelectorAll(".pattern-adder")[1].addEventListener("click", function() {
+            const newEl = host.getNewPattern(null);
+
+            host.shadowRoot.querySelector(".marker-container").appendChild(newEl);
+        });
+
+        this.shadowRoot.querySelectorAll(".predefined-adder")[0].addEventListener("click", function() {
             const newEl = host.getNewPredefined(null);
 
             host.shadowRoot.querySelector(".marker-container").prepend(newEl);
+        });
+
+        this.shadowRoot.querySelectorAll(".predefined-adder")[1].addEventListener("click", function() {
+            const newEl = host.getNewPredefined(null);
+
+            host.shadowRoot.querySelector(".marker-container").appendChild(newEl);
         });
 
         this.shadowRoot.querySelector(".table-generator").addEventListener("click", function() {
@@ -610,11 +646,11 @@ class QuotaDefinition extends HTMLElement {
     }
 
     getNewPredefined(predefinedMarkers) {
-        this.markerlists ++;
+        this.#markerlists ++;
 
         const newEl = document.createElement("sl-predefined-marker");
         newEl.classList.add("marker");
-        newEl.setAttribute("sl_id", `${this.markerlists}`);
+        newEl.setAttribute("sl_id", `${this.#markerlists}`);
 
         if (predefinedMarkers != null) {
             newEl.predefined = predefinedMarkers;
@@ -624,11 +660,11 @@ class QuotaDefinition extends HTMLElement {
     }
 
     getNewPattern(patternMarker) {
-        this.markerlists ++;
+        this.#markerlists ++;
 
         const newEl = document.createElement("sl-pattern-marker");
         newEl.classList.add("marker");
-        newEl.setAttribute("sl_id", `${this.markerlists}`);
+        newEl.setAttribute("sl_id", `${this.#markerlists}`);
 
         if (patternMarker != null) {
             newEl.pattern = patternMarker;
@@ -676,7 +712,7 @@ class QuotaDefinition extends HTMLElement {
                 host.generateLines(quotaTable, arrays, currentArray + 1, `${line}<td>${arrays[currentArray][i]}</td>`);
             }
             else {
-                host.tableInner += `<tr>${line}<td>${arrays[currentArray][i]}</td><td>999</td></tr>`;
+                host.#tableInner += `<tr>${line}<td>${arrays[currentArray][i]}</td><td>999</td></tr>`;
             }
         }
     }
@@ -687,7 +723,7 @@ class QuotaDefinition extends HTMLElement {
         const quotaCellNo = this.shadowRoot.querySelector("#cell-no").value;
         const markers = this.markerList;
         let headerRow = "";
-        this.tableInner = "";
+        this.#tableInner = "";
 
         quotaTable.replaceChildren();
 
@@ -697,7 +733,7 @@ class QuotaDefinition extends HTMLElement {
 
         this.generateLines(quotaTable, markers, 0, "");
 
-        quotaTable.innerHTML = `<tr><td># cells:${quotaCellNo} = ${quotaName}</td>${headerRow}<td></td></tr>${this.tableInner}`;
+        quotaTable.innerHTML = `<tr><td># cells:${quotaCellNo} = ${quotaName}</td>${headerRow}<td></td></tr>${this.#tableInner}`;
     }
 
     getObj() {
