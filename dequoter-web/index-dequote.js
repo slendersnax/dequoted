@@ -7,344 +7,16 @@ class PredefinedMarker extends HTMLElement {
     constructor() {
         super();
         this.sl_id = 1;
-    }
 
-    static get observedAttributes() {
-        return ["sl_id"];
-    }
-
-    attributeChangedCallback(property, oldValue, newValue) {
-        if (oldValue === newValue) {
-            return;
-        }
-
-        this[ property ] = newValue;
-    }
-
-    connectedCallback() {
-        const shadow = this.attachShadow({ mode: "open" });
-
-        shadow.innerHTML = `
-        <style>
-            section {
-                border-bottom: 1px solid var(--theme-blue-border);
-            }
-
-            button {
-                background-color: var(--theme-blue-button);
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                margin: 4px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.2s;
-            }
-
-            button:hover {
-                background-color: var(--theme-blue-button-hover);
-            }
-
-            button.delete {
-                background-color: red;
-            }
-
-            button.delete:hover {
-                background-color: rgba(150, 0, 0, 1);
-            }
-
-            .title {
-                padding: 4px 0px;
-                display: flex;
-            }
-
-            .title > span:first-child {
-                flex: 1;
-                text-align: left;
-            }
-
-            .title > span:last-child {
-                text-align: right;
-            }
-
-            .title button {
-                margin: 0px;
-            }
-
-            .predefined-container {
-                display: grid;
-                align-items: center;
-                grid-template-columns: 30% 70%;
-                margin-bottom: 4px;
-            }
-
-            .predefined-container label {
-                margin-right: 4px;
-            }
-
-            input, textarea {
-                margin: 4px;
-                padding: 6px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-
-            textarea {
-                margin-top: 0px;
-                margin-bottom: 0px;
-            }
-        </style>
-
-        <section>
-            <div class="title">
-                <span><b>markers ${this.sl_id}:</b> predefined</span>
-                <span id="btn-holder">
-                    <button class="add-definition">+ predefined</button>
-                    <button class="add-definition">+ pattern</button>
-                    <button class="delete">delete</button>
-                </span>
-            </div>
-            <div class="predefined-container">
-                <label for="predef-markers">predefined markers</label><textarea id="predef-markers"></textarea>
-            </div>
-        </section>`;
-
-        // otherwise the this will refer to the element in the .addEventListener
-        const host = this;
-
-        shadow.querySelector(".delete").addEventListener("click", function() {
-            host.remove();
-        });
-    }
-
-    set predefined(predefinedList) {
-        const shadow = this.shadowRoot;
-
-        shadow.querySelector("#predef-markers").value = predefinedList.join(" ");
-    }
-
-    get markerList() {
-        const shadow = this.shadowRoot;
-
-        return shadow.querySelector("#predef-markers").value.split(" ");
-    }
-
-    getObj() {
-        const shadow = this.shadowRoot;
-
-        return shadow.querySelector("#predef-markers").value.split(" ");
-    }
-}
-
-customElements.define("predefined-marker", PredefinedMarker);
-
-class PatternMarker extends HTMLElement {
-    constructor() {
-        super();
-        this.sl_id = 1;
-    }
-
-    static get observedAttributes() {
-        return ["sl_id"];
-    }
-
-    attributeChangedCallback(property, oldValue, newValue) {
-        if (oldValue === newValue) {
-            return;
-        }
-
-        this[ property ] = newValue;
-    }
-
-    connectedCallback() {
-        const shadow = this.attachShadow({ mode: "open" });
-
-        shadow.innerHTML = `
-        <style>
-            section {
-                border-bottom: 1px solid var(--theme-blue-border);
-            }
-
-            .pattern-container {
-                display: grid;
-                grid-template-columns: 30% 70%;
-                align-items: center;
-            }
-
-            button {
-                background-color: var(--theme-blue-button);
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                margin: 4px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.2s;
-            }
-
-            button:hover {
-                background-color: var(--theme-blue-button-hover);
-            }
-
-            button.delete {
-                background-color: red;
-            }
-
-            button.delete:hover {
-                background-color: rgba(150, 0, 0, 1);
-            }
-
-            .title {
-                padding: 4px 0px;
-                display: flex;
-            }
-
-            .title > span:first-child {
-                flex: 1;
-                text-align: left;
-            }
-
-            .title > span:last-child {
-                text-align: right;
-            }
-
-            .title button {
-                margin: 0px;
-            }
-
-            .pattern-container > div {
-                display: flex;
-            }
-
-            .pattern-container > div:last-child {
-                margin-bottom: 4px;
-            }
-
-            div > input { 
-                flex: 1;
-                min-width: 0;
-            }
-
-            div > input:not(:last-child) {
-                margin-right: 4px;
-            }
-
-            input, textarea {
-                margin: 4px;
-                padding: 6px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-        </style>
-
-        <section>
-            <div class="title">
-                <span><b>markers ${this.sl_id}:</b> pattern</span>
-                <span id="btn-holder">
-                    <button class="add-definition">+ predefined</button>
-                    <button class="add-definition">+ pattern</button>
-                    <button class="delete">delete</button>
-                </span>
-            </div>
-            <div class="pattern-container">
-                <label>label, separator</label>
-                <div>
-                    <input type="text" id="label"/>
-                    <input type="text" id="separator" value="_"/>
-                </div>
-                <label>start, end, step</label>
-                <div>
-                    <input type="number" id="start"/>
-                    <input type="number" id="end"/>
-                    <input type="number" id="step" value="1" />
-                </div>
-            </div>
-        </section>`;
-
-        const host = this;
-
-        shadow.querySelector(".delete").addEventListener("click", function() {
-            host.remove();
-        });
-    }
-
-    set pattern(patternObj) {
-        const shadow = this.shadowRoot;
-
-        shadow.querySelector("#label").value     = patternObj.label;
-        shadow.querySelector("#separator").value = patternObj.separator;
-        shadow.querySelector("#start").value     = patternObj.start;
-        shadow.querySelector("#end").value       = patternObj.end;
-        shadow.querySelector("#step").value      = patternObj.step;
-    }
-
-    get markerList() {
-        const shadow = this.shadowRoot;
-        const markers = [];
+        if (!this.shadowRoot) {
+            this.attachShadow({ mode: "open" });
         
-        const markerName = shadow.querySelector("#label").value;
-        const separator  = shadow.querySelector("#separator").value;
-        const start = shadow.querySelector("#start").valueAsNumber;
-        const end   = shadow.querySelector("#end").valueAsNumber;
-        const step  = shadow.querySelector("#step").valueAsNumber;
-
-        // TODO: TEST IF WORKS FROM BIG NUM -> SMALL NUM
-        for(let i = start; i <= end; i += step) {
-            markers.push(`${markerName}${separator}${i}`);
-        }
-
-        return markers;
-    }
-
-    getObj() {
-        const shadow = this.shadowRoot;
-
-        return {
-            label: shadow.querySelector("#label").value,
-            separator: shadow.querySelector("#separator").value,
-            start: shadow.querySelector("#start").value,
-            end: shadow.querySelector("#end").value,
-            step: shadow.querySelector("#step").value
-        };
-    }
-}
-
-customElements.define("pattern-marker", PatternMarker);
-
-class QuotaDefinition extends HTMLElement {
-    constructor() {
-        super();
-        this.sl_id = 1;
-        this.tableInner = "";
-        this.markerlists = 0;
-    }
-
-    static get observedAttributes() {
-        return ["sl_id"];
-    }
-
-    /*
-    Called whenever an observed attribute is changed. 
-    Those defined in HTML are passed immediately, but JavaScript can modify them. (via .setAttribute())
-    The method may need to trigger a re-render when this occurs.
-    */
-    attributeChangedCallback(property, oldValue, newValue) {
-        if (oldValue === newValue) {
-            return;
-        }
-
-        this[ property ] = newValue;
-    }
-
-    /*
-    This function is called when the Web Component is appended to a Document Object Model. 
-    It should run any required rendering.
-    */
-    connectedCallback() {
-        const shadow = this.attachShadow({ mode: "open" });
-        
-        shadow.innerHTML = `
+            this.shadowRoot.innerHTML = `
             <style>
+                section {
+                    border-bottom: 1px solid var(--theme-blue-border);
+                }
+
                 button {
                     background-color: var(--theme-blue-button);
                     color: white;
@@ -368,6 +40,36 @@ class QuotaDefinition extends HTMLElement {
                     background-color: rgba(150, 0, 0, 1);
                 }
 
+                .title {
+                    padding: 4px 0px;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .title > span:first-child {
+                    flex: 1;
+                    text-align: left;
+                }
+
+                .title > span:last-child {
+                    text-align: right;
+                }
+
+                .title button {
+                    margin: 0px;
+                }
+
+                .predefined-container {
+                    display: grid;
+                    align-items: center;
+                    grid-template-columns: 30% 70%;
+                    margin-bottom: 4px;
+                }
+
+                .predefined-container label {
+                    margin-right: 4px;
+                }
+
                 input, textarea {
                     margin: 4px;
                     padding: 6px;
@@ -375,140 +77,453 @@ class QuotaDefinition extends HTMLElement {
                     border-radius: 4px;
                 }
 
-                details {
-                    border: 2px solid var(--theme-blue-border);
-                    border-radius: 5px;
-                    margin: 4px;
+                textarea {
+                    margin-top: 0px;
+                    margin-bottom: 0px;
+                }
+            </style>
+
+            <section>
+                <div class="title">
+                    <span><b>markers ${this.sl_id}:</b> predefined</span>
+                    <span id="btn-holder">
+                        <button class="add-definition">+ predefined below</button>
+                        <button class="add-definition">+ pattern below</button>
+                        <button class="delete">delete</button>
+                    </span>
+                </div>
+                <div class="predefined-container">
+                    <label for="predef-markers">predefined markers</label><textarea id="predef-markers"></textarea>
+                </div>
+            </section>`;
+        }
+    }
+
+    static get observedAttributes() {
+        return ["sl_id"];
+    }
+
+    attributeChangedCallback(property, oldValue, newValue) {
+        if (oldValue === newValue) {
+            return;
+        }
+
+        this[ property ] = newValue;
+
+        this.update();
+    }
+
+    update() {
+        this.shadowRoot.querySelector(".title > span:first-of-type").innerHTML = `<b>markers ${this.sl_id}:</b> predefined`;
+    }
+
+    connectedCallback() {
+        // otherwise the this in this.remove() would refer to the .delete element :)
+        const host = this;
+
+        this.shadowRoot.querySelector(".delete").addEventListener("click", function() {
+            host.remove();
+        });
+    }
+
+    set predefined(predefinedList) {
+        this.shadowRoot.querySelector("#predef-markers").value = predefinedList.join(" ");
+    }
+
+    get markerList() {
+        return this.shadowRoot.querySelector("#predef-markers").value.split(" ");
+    }
+
+    getObj() {
+        return this.shadowRoot.querySelector("#predef-markers").value.split(" ");
+    }
+}
+
+customElements.define("sl-predefined-marker", PredefinedMarker);
+
+class PatternMarker extends HTMLElement {
+    constructor() {
+        super();
+        this.sl_id = 1;
+
+        if (!this.shadowRoot) {
+            this.attachShadow({ mode: "open" });
+
+            this.shadowRoot.innerHTML = `
+            <style>
+                section {
+                    border-bottom: 1px solid var(--theme-blue-border);
                 }
 
-                details > * {
-                    padding: 5px 10px;
-                }
-
-                summary {
-                    font-size: 1.3em;
-                    font-weight: bold;
-                    display: flex;
-                    align-items: center;
-                }
-
-                summary span.caret {
-                    font-size: 1.3em;
-                    display: inline-block;
-                    transform-origin: center 18px;
-                }
-
-                summary > span:first-child {
-                    flex: 1;
-                    text-align: left;
-                    cursor: pointer;
-                    user-select: none;
-                }
-
-                summary > span:last-child {
-                    text-align: right;
-                }
-
-                summary button {
-                    margin: 0px;
-                }
-
-                details[open] summary {
-                    border-bottom: 2px solid var(--theme-blue-border);
-                }
-
-                details[open] summary span.caret {
-                    transform: rotate(90deg);
-                }
-
-                .quota-wrapper {
-                    width: 100%;
-                    
+                .pattern-container {
                     display: grid;
-                    grid-template-columns: 50% 50%;
-                }
-
-                .quota-wrapper > * {
-                    max-height: 400px;
-                    overflow: scroll;
-                }
-
-                .quota-attributes .title-attributes {
-                    display: grid;
-
                     grid-template-columns: 30% 70%;
                     align-items: center;
                 }
 
-                .quota-attributes button:first-of-type {
-                    margin-left: 0px;
+                button {
+                    background-color: var(--theme-blue-button);
+                    color: white;
+                    border: none;
+                    padding: 8px 12px;
+                    margin: 4px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.2s;
                 }
 
-                .command-btns {
-                    display: flex;    
+                button:hover {
+                    background-color: var(--theme-blue-button-hover);
+                }
+
+                button.delete {
+                    background-color: red;
+                }
+
+                button.delete:hover {
+                    background-color: rgba(150, 0, 0, 1);
+                }
+
+                .title {
+                    padding: 4px 0px;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .title > span:first-child {
+                    flex: 1;
+                    text-align: left;
+                }
+
+                .title > span:last-child {
+                    text-align: right;
+                }
+
+                .title button {
+                    margin: 0px;
+                }
+
+                .pattern-container > div {
+                    display: flex;
+                }
+
+                .pattern-container > div:last-child {
+                    margin-bottom: 4px;
+                }
+
+                div > input { 
+                    flex: 1;
+                    min-width: 0;
+                }
+
+                div > input:not(:last-child) {
+                    margin-right: 4px;
+                }
+
+                input, textarea {
+                    margin: 4px;
+                    padding: 6px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
                 }
             </style>
 
-            <details>
-                <summary>
-                    <span>
-                        <span class="caret">&#9656;</span>
-                        <span>Quota #${this.sl_id}</span>
-                    </span>
-                    <span class="btn-holder">
-                        <button class="add-definition">add quota below</button>
+            <section>
+                <div class="title">
+                    <span><b>markers ${this.sl_id}:</b> pattern</span>
+                    <span id="btn-holder">
+                        <button class="add-definition">+ predefined below</button>
+                        <button class="add-definition">+ pattern below</button>
                         <button class="delete">delete</button>
                     </span>
-                </summary>
-                <section>
-                    <div class="quota-wrapper">
-                        <div class="quota-attributes">
-                            <div class="title-attributes">
-                                <label for="name">name</label><input type="text" id="name"/>
-
-                                <label for="cell-no">cell number</label><input type="number" id="cell-no" value="1"/>
-                            </div>
-
-                            <div class="command-btns">
-                                <button class="predefined-adder">add predefined</button>
-                                <button class="pattern-adder">add pattern</button>
-                                <button class="table-generator">generate quota table</button>
-                                <button class="table-copy-btn">copy quota table</button>
-                            </div>
-
-                            <div class="marker-container">
-                            </div>
-                        </div>
-                        <div class="table-wrapper">
-                            <table id="quota-table" border="1">
-                            </table>
-                        </div>
+                </div>
+                <div class="pattern-container">
+                    <label>label, separator</label>
+                    <div>
+                        <input type="text" id="label"/>
+                        <input type="text" id="separator" value="_"/>
                     </div>
-                </section>
-            </details>
-        `;
+                    <label>start, end, step</label>
+                    <div>
+                        <input type="number" id="start"/>
+                        <input type="number" id="end"/>
+                        <input type="number" id="step" value="1" />
+                    </div>
+                </div>
+            </section>`;
+        }
+    }
 
+    static get observedAttributes() {
+        return ["sl_id"];
+    }
+
+    attributeChangedCallback(property, oldValue, newValue) {
+        if (oldValue === newValue) {
+            return;
+        }
+
+        this[ property ] = newValue;
+
+        this.update();
+    }
+
+    update() {
+        this.shadowRoot.querySelector(".title > span:first-of-type").innerHTML = `<b>markers ${this.sl_id}:</b> pattern`;
+    }
+
+    connectedCallback() {
         const host = this;
 
-        shadow.querySelector(".pattern-adder").addEventListener("click", function() {
+        this.shadowRoot.querySelector(".delete").addEventListener("click", function() {
+            host.remove();
+        });
+    }
+
+    set pattern(patternObj) {
+        this.shadowRoot.querySelector("#label").value     = patternObj.label;
+        this.shadowRoot.querySelector("#separator").value = patternObj.separator;
+        this.shadowRoot.querySelector("#start").value     = patternObj.start;
+        this.shadowRoot.querySelector("#end").value       = patternObj.end;
+        this.shadowRoot.querySelector("#step").value      = patternObj.step;
+    }
+
+    get markerList() {
+        const markers = [];
+        
+        const markerName = this.shadowRoot.querySelector("#label").value;
+        const separator  = this.shadowRoot.querySelector("#separator").value;
+        const start = this.shadowRoot.querySelector("#start").valueAsNumber;
+        const end   = this.shadowRoot.querySelector("#end").valueAsNumber;
+        const step  = this.shadowRoot.querySelector("#step").valueAsNumber;
+
+        // TODO: TEST IF WORKS FROM BIG NUM -> SMALL NUM
+        for(let i = start; i <= end; i += step) {
+            markers.push(`${markerName}${separator}${i}`);
+        }
+
+        return markers;
+    }
+
+    getObj() {
+        return {
+            label: this.shadowRoot.querySelector("#label").value,
+            separator: this.shadowRoot.querySelector("#separator").value,
+            start: this.shadowRoot.querySelector("#start").value,
+            end: this.shadowRoot.querySelector("#end").value,
+            step: this.shadowRoot.querySelector("#step").value
+        };
+    }
+}
+
+customElements.define("sl-pattern-marker", PatternMarker);
+
+class QuotaDefinition extends HTMLElement {
+    constructor() {
+        super();
+        this.sl_id = 1;
+        this.tableInner = "";
+        this.markerlists = 0;
+
+        if (!this.shadowRoot) {
+            this.attachShadow({ mode: "open" });
+        
+            this.shadowRoot.innerHTML = `
+                <style>
+                    button {
+                        background-color: var(--theme-blue-button);
+                        color: white;
+                        border: none;
+                        padding: 8px 12px;
+                        margin: 4px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: background-color 0.2s;
+                    }
+
+                    button:hover {
+                        background-color: var(--theme-blue-button-hover);
+                    }
+
+                    button.delete {
+                        background-color: red;
+                    }
+
+                    button.delete:hover {
+                        background-color: rgba(150, 0, 0, 1);
+                    }
+
+                    input, textarea {
+                        margin: 4px;
+                        padding: 6px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                    }
+
+                    details {
+                        border: 2px solid var(--theme-blue-border);
+                        border-radius: 5px;
+                        margin: 4px;
+                    }
+
+                    details > * {
+                        padding: 5px 10px;
+                    }
+
+                    summary {
+                        font-size: 1.3em;
+                        font-weight: bold;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    summary span.caret {
+                        font-size: 1.3em;
+                        display: inline-block;
+                        transform-origin: center 18px;
+                    }
+
+                    summary > span:first-child {
+                        flex: 1;
+                        text-align: left;
+                        cursor: pointer;
+                        user-select: none;
+                    }
+
+                    summary > span:last-child {
+                        text-align: right;
+                    }
+
+                    summary button {
+                        margin: 0px;
+                    }
+
+                    details[open] summary {
+                        border-bottom: 2px solid var(--theme-blue-border);
+                    }
+
+                    details[open] summary span.caret {
+                        transform: rotate(90deg);
+                    }
+
+                    .quota-wrapper {
+                        width: 100%;
+                        
+                        display: grid;
+                        grid-template-columns: 50% 50%;
+                    }
+
+                    .quota-wrapper > * {
+                        max-height: 400px;
+                        overflow: scroll;
+                    }
+
+                    .quota-attributes .title-attributes {
+                        display: grid;
+
+                        grid-template-columns: 30% 70%;
+                        align-items: center;
+                    }
+
+                    .quota-attributes button:first-of-type {
+                        margin-left: 0px;
+                    }
+
+                    .command-btns {
+                        display: flex;    
+                    }
+                </style>
+
+                <details>
+                    <summary>
+                        <span>
+                            <span class="caret">&#9656;</span>
+                            <span class="quota-title">Quota #${this.sl_id}</span>
+                        </span>
+                        <span class="btn-holder">
+                            <button class="add-definition">add quota below</button>
+                            <button class="delete">delete</button>
+                        </span>
+                    </summary>
+                    <section>
+                        <div class="quota-wrapper">
+                            <div class="quota-attributes">
+                                <div class="title-attributes">
+                                    <label for="name">name</label><input type="text" id="name"/>
+
+                                    <label for="cell-no">cell number</label><input type="number" id="cell-no" value="1"/>
+                                </div>
+
+                                <div class="command-btns">
+                                    <button class="predefined-adder">+ predefined at the start</button>
+                                    <button class="pattern-adder">+ pattern at the start</button>
+                                    <button class="table-generator">generate quota table</button>
+                                    <button class="table-copy-btn">copy quota table</button>
+                                </div>
+
+                                <div class="marker-container">
+                                </div>
+                            </div>
+                            <div class="table-wrapper">
+                                <table id="quota-table" border="1">
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </details>
+            `;
+        }
+    }
+
+    static get observedAttributes() {
+        return ["sl_id"];
+    }
+
+    /*
+    Called whenever an observed attribute is changed. 
+    Those defined in HTML are passed immediately, but JavaScript can modify them. (via .setAttribute())
+    The method may need to trigger a re-render when this occurs.
+    */
+    attributeChangedCallback(property, oldValue, newValue) {
+        if (oldValue === newValue) {
+            return;
+        }
+
+        this[ property ] = newValue;
+
+        this.update();
+    }
+
+    update() {
+        this.shadowRoot.querySelector(".quota-title").innerHTML = `Quota #${this.sl_id}`;
+    }
+
+    /*
+    This function is called when the Web Component is appended to a Document Object Model. 
+    It should run any required rendering.
+    */
+    connectedCallback() {
+        const host = this;
+
+        this.shadowRoot.querySelector(".pattern-adder").addEventListener("click", function() {
             host.addNewPattern(null);
         });
 
-        shadow.querySelector(".predefined-adder").addEventListener("click", function() {
+        this.shadowRoot.querySelector(".predefined-adder").addEventListener("click", function() {
             host.addNewPredefined(null);
         });
 
-        shadow.querySelector(".table-generator").addEventListener("click", function() {
+        this.shadowRoot.querySelector(".table-generator").addEventListener("click", function() {
             host.generateTable();
         });
 
-        shadow.querySelector(".add-definition").addEventListener("click", function() {
+        this.shadowRoot.querySelector(".add-definition").addEventListener("click", function() {
             const newDef = getNewDefinition();
 
             document.querySelector(`[sl_id='${host.sl_id}']`).after(newDef);
         });
 
-        shadow.querySelector(".delete").addEventListener("click", function() {
+        this.shadowRoot.querySelector(".delete").addEventListener("click", function() {
             host.remove();
         });
     }
@@ -516,13 +531,11 @@ class QuotaDefinition extends HTMLElement {
     addNewPredefined(predefinedMarkers) {
         this.markerlists ++;
 
-        const shadow = this.shadowRoot;
-
-        const newEl = document.createElement("predefined-marker");
+        const newEl = document.createElement("sl-predefined-marker");
         newEl.classList.add("marker");
         newEl.setAttribute("sl_id", `${this.markerlists}`);
             
-        shadow.querySelector(".marker-container").appendChild(newEl);
+        this.shadowRoot.querySelector(".marker-container").prepend(newEl);
 
         if (predefinedMarkers != null) {
             newEl.predefined = predefinedMarkers;
@@ -532,13 +545,11 @@ class QuotaDefinition extends HTMLElement {
     addNewPattern(patternMarker) {
         this.markerlists ++;
 
-        const shadow = this.shadowRoot;
-
-        const newEl = document.createElement("pattern-marker");
+        const newEl = document.createElement("sl-pattern-marker");
         newEl.classList.add("marker");
         newEl.setAttribute("sl_id", `${this.markerlists}`);
 
-        shadow.querySelector(".marker-container").appendChild(newEl);
+        this.shadowRoot.querySelector(".marker-container").prepend(newEl);
 
         if (patternMarker != null) {
             newEl.pattern = patternMarker;
@@ -546,25 +557,23 @@ class QuotaDefinition extends HTMLElement {
     }
 
     fillQuota(name, cell_number, markerArr) {
-        const shadow = this.shadowRoot;
         const host = this;
 
-        shadow.querySelector("#name").value = name;
-        shadow.querySelector("#cell-no").value = cell_number;
+        this.shadowRoot.querySelector("#name").value = name;
+        this.shadowRoot.querySelector("#cell-no").value = cell_number;
 
         for(let i = 0; i < markerArr.length; i ++) {
             if (Array.isArray(markerArr[i])) {
-                host.addNewPredefined(markerArr[i]);
+                this.addNewPredefined(markerArr[i]);
             }
             else {
-                host.addNewPattern(markerArr[i]);
+                this.addNewPattern(markerArr[i]);
             }
         }
     } 
 
     get markerList() {
-        const shadow = this.shadowRoot;
-        const markerElements = shadow.querySelectorAll(".marker");
+        const markerElements = this.shadowRoot.querySelectorAll(".marker");
         const markers = [];
 
         for (let i = 0; i < markerElements.length; i ++) {
@@ -588,10 +597,9 @@ class QuotaDefinition extends HTMLElement {
     }
 
     generateTable() {
-        const shadow = this.shadowRoot;
-        const quotaTable  = shadow.querySelector("#quota-table");
-        const quotaName   = shadow.querySelector("#name").value;
-        const quotaCellNo = shadow.querySelector("#cell-no").value;
+        const quotaTable  = this.shadowRoot.querySelector("#quota-table");
+        const quotaName   = this.shadowRoot.querySelector("#name").value;
+        const quotaCellNo = this.shadowRoot.querySelector("#cell-no").value;
         const markers = this.markerList;
         let headerRow = "";
         this.tableInner = "";
@@ -608,9 +616,9 @@ class QuotaDefinition extends HTMLElement {
     }
 
     getObj() {
-        const shadow = this.shadowRoot;
+        const host = this;
 
-        const markerElements = shadow.querySelectorAll(".marker");
+        const markerElements = this.shadowRoot.querySelectorAll(".marker");
         const marker_arrs = [];
 
         for (let i = 0; i < markerElements.length; i ++) {
@@ -618,14 +626,14 @@ class QuotaDefinition extends HTMLElement {
         }
 
         return {
-            name: shadow.querySelector("#name").value,
-            cell_number: shadow.querySelector("#cell-no").value,
+            name: this.shadowRoot.querySelector("#name").value,
+            cell_number: this.shadowRoot.querySelector("#cell-no").value,
             markers: marker_arrs
         };
     }
 }
 
-customElements.define("quota-definiton", QuotaDefinition);
+customElements.define("sl-quota-definiton", QuotaDefinition);
 
 // main() kinda
 
@@ -656,7 +664,7 @@ function generateJSONFromQuotas() {
 function getNewDefinition() {
     nCurrentQuotas ++;
 
-    const newDef = document.createElement("quota-definiton");
+    const newDef = document.createElement("sl-quota-definiton");
     newDef.setAttribute("sl_id", `${nCurrentQuotas}`);
 
     return newDef;
