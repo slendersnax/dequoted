@@ -93,7 +93,8 @@ class PredefinedMarker extends HTMLElement {
                     </span>
                 </div>
                 <div class="predefined-container">
-                    <label for="predef-markers">predefined markers</label><textarea id="predef-markers"></textarea>
+                    <label for="predef-markers">predefined markers</label>
+                    <textarea id="predef-markers" placeholder="region_1 region_8 region49 ..."></textarea>
                 </div>
             </section>`;
         }

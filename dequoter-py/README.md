@@ -1,4 +1,4 @@
-# dequoted-py
+# dequoter-py
 
 A JSON-to-CSV quota generator for Decipher
 
