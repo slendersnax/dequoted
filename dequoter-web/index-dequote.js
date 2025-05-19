@@ -627,6 +627,7 @@ class QuotaDefinition extends HTMLElement {
    
             let range = document.createRange();  
             range.selectNode(quotaTable);
+            window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
 
             document.execCommand("copy");
