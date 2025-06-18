@@ -462,15 +462,12 @@ class QuotaDefinition extends HTMLElement {
                         grid-template-columns: 50% 50%;
                     }
 
-                    .quota-wrapper > * {
-                        max-height: 400px;
-                    }
-
                     .quota-wrapper .quota-attributes {
                         overflow: hidden;
                     }
 
                     .quota-wrapper .table-wrapper {
+                        max-height: 450px;
                         overflow: scroll;
                     }
 
@@ -487,7 +484,7 @@ class QuotaDefinition extends HTMLElement {
 
                     .quota-wrapper .quota-attributes .marker-container {
                         overflow: scroll;
-                        max-height: 200px;
+                        max-height: 250px;
                     }
 
                     .quota-wrapper .command-btns {
@@ -533,9 +530,14 @@ class QuotaDefinition extends HTMLElement {
                         <div class="quota-wrapper">
                             <div class="quota-attributes">
                                 <div class="title-attributes">
-                                    <label for="name">name</label><input type="text" id="name"/>
+                                    <label for="name">name</label>
+                                    <input type="text" id="name"/>
 
-                                    <label for="cell-no">cell number</label><input type="number" id="cell-no" value="1"/>
+                                    <label for="cell-no">cells</label>
+                                    <input type="number" id="cell-no" value="1"/>
+
+                                    <label for="limit">limit</label>
+                                    <input type="text" id="limit" value="inf"/>
                                 </div>
 
                                 <div class="command-btns">
@@ -687,11 +689,12 @@ class QuotaDefinition extends HTMLElement {
         return newEl;
     }
 
-    fillQuota(name, cell_number, markerArr) {
+    fillQuota(name, cells, limit, markerArr) {
         const host = this;
 
         this.shadowRoot.querySelector("#name").value = name;
-        this.shadowRoot.querySelector("#cell-no").value = cell_number;
+        this.shadowRoot.querySelector("#cell-no").value = cells;
+        this.shadowRoot.querySelector("#limit").value = limit;
 
         for(let i = 0; i < markerArr.length; i ++) {
             let newEl;
@@ -726,7 +729,7 @@ class QuotaDefinition extends HTMLElement {
                 host.generateLines(quotaTable, arrays, currentArray + 1, `${line}<td>${arrays[currentArray][i]}</td>`);
             }
             else {
-                host.#tableInner += `<tr>${line}<td>${arrays[currentArray][i]}</td><td>999</td></tr>`;
+                host.#tableInner += `<tr>${line}<td>${arrays[currentArray][i]}</td><td>${host.shadowRoot.querySelector("#limit").value}</td></tr>`;
             }
         }
     }
@@ -762,7 +765,8 @@ class QuotaDefinition extends HTMLElement {
 
         return {
             name: this.shadowRoot.querySelector("#name").value,
-            cell_number: this.shadowRoot.querySelector("#cell-no").value,
+            cells: this.shadowRoot.querySelector("#cell-no").value,
+            limit: this.shadowRoot.querySelector("#limit").value,
             markers: marker_arrs
         };
     }
@@ -781,7 +785,7 @@ function generateQuotasFromJSON() {
     for(let i = 0; i < quotaArr.length; i ++) {
         const newDef = getNewDefinition();
         document.querySelector("#quota-definitions").append(newDef);
-        newDef.fillQuota(quotaArr[i].name, quotaArr[i].cell_number, quotaArr[i].markers);
+        newDef.fillQuota(quotaArr[i].name, quotaArr[i].cells, quotaArr[i].limit, quotaArr[i].markers);
     }
 }
 
