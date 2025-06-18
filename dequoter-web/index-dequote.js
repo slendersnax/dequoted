@@ -721,12 +721,12 @@ class QuotaDefinition extends HTMLElement {
         return markers;
     }
 
-    generateLines(quotaTable, arrays, currentArray, line) {
+    generateLines(arrays, currentArray, line) {
         const host = this;
 
         for(let i = 0; i < arrays[currentArray].length; i ++) {
             if (currentArray < arrays.length - 1) {
-                host.generateLines(quotaTable, arrays, currentArray + 1, `${line}<td>${arrays[currentArray][i]}</td>`);
+                host.generateLines(arrays, currentArray + 1, `${line}<td>${arrays[currentArray][i]}</td>`);
             }
             else {
                 host.#tableInner += `<tr>${line}<td>${arrays[currentArray][i]}</td><td>${host.shadowRoot.querySelector("#limit").value}</td></tr>`;
@@ -742,13 +742,14 @@ class QuotaDefinition extends HTMLElement {
         let headerRow = "";
         this.#tableInner = "";
 
+        // deletes current quota table
         quotaTable.replaceChildren();
 
         for (let i = 0; i < markers.length - 1; i ++) {
             headerRow += "<td>#</td>";
         }
 
-        this.generateLines(quotaTable, markers, 0, "");
+        this.generateLines(markers, 0, "");
 
         quotaTable.innerHTML = `<tr><td># cells:${quotaCellNo} = ${quotaName}</td>${headerRow}<td></td></tr>${this.#tableInner}`;
     }
