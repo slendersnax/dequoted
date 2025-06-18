@@ -1,17 +1,29 @@
 [
 	{
 		"name" : "gender x age quota",
-		"cellcount": 1,
-		"items": [{"gender": 2}, {"age" : [2, 8]}]
+		"cells": "1",
+		"limit":"inf",
+		"markers": [
+			{"label":"gender","separator":"_","start":"1","end":"3","step":"1"},
+			{"label":"age","separator":"_","start":"2","end":"6","step":"1"}
+		]
 	},
 	{
 		"name" : "region quota",
-		"cellcount": 1,
-		"items": [{"region" : 5}]
+		"cells": "1",
+		"limit":"inf",
+		"markers": [
+			["region_1", "region_2", "region_49"]
+		]
 	},
-		{
+	{
 		"name" : "country x csp x cell quota",
-		"cellcount": 2,
-		"items": [{"country": 4}, {"csp" : [0, 9, 3]}, {"cell": 5}]
+		"cells": "2",
+		"limit":"inf",
+		"markers": [
+			{"label":"country","separator":"_","start":"1","end":"4","step":"1"},
+			{"label":"csp","separator":"_","start":"0","end":"9","step":"3"},
+			["cell_1", "cell_3", "cell_6"]
+		]
 	}
 ]

@@ -53,3 +53,7 @@ This JSON code will create the following setup:
 
 ![example quota](example_1.png?)
 ![example quota](example_2.png?)
+
+### to-do
+
+- [ ] FIX: on some Chromium browsers the HTML entities aren't showing up (everything else works though, so what gives?)

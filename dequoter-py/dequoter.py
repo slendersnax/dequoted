@@ -1,59 +1,49 @@
 import json, csv, sys, os
 
-def rec_quotaline(csv_file, arr, s_line):
-		# the value format in these items is the same as for the range() function
-		# start, end, step
-		nStart = 1
-		nEnd = arr[0][1]
-		nStep = 1
+def generate_quotaline(csv_file, marker_lists, s_line):
+	for marker in marker_lists[0]:
+		if (len(marker_lists) > 1):
+			generate_quotaline(csv_file, marker_lists[1:], s_line + "{},".format(marker))
+		else:
+			global quota_limit
+			csv_file.write(s_line + "{},{}\n".format(marker, quota_limit))
 
-		if len(arr[0]) > 2:
-			nStart = arr[0][1]
-			nEnd = arr[0][2]
-
-		if len(arr[0]) > 3:
-			nStep = arr[0][3]
-
-		for i in range(nStart, nEnd + 1, nStep):
-			if len(arr) > 1:
-				rec_quotaline(csv_file, arr[1:], s_line + "{}_{},".format(arr[0][0], str(i)))
-			else:
-				csv_file.write(s_line + "{}_{},999\n".format(arr[0][0], str(i)))
 
 def generate_csv(json_file):
+	global quota_limit
 	json_file = open(json_file, "rt")
-	# that long ass .format is just to include the JSON file's name without extension or the full path
+	# that long ass .format is just to include the JSON file's name without the extension or the full path
 	csv_file = open("result_{}.csv".format(os.path.basename(json_file.name).split(".")[0]), "wt")
 
 	table_data = json.load(json_file)
 
 	for quota in table_data:
-		csv_file.write("# " + ("" if quota["cellcount"] == 1 else "cells:{} ".format(quota["cellcount"])) + "= " + quota["name"] + (",#" * (len(quota["items"]) - 1)) + "\n")
+		csv_file.write("# " + "cells:{} ".format(quota["cells"]) + "= " + quota["name"] + (",#" * (len(quota["markers"]) - 1)) + "\n")
 
-		stack = []
+		quota_limit = quota["limit"]
 
-		for item in quota["items"]:
-			arr = []
+		marker_lists = []
 
-			for key in item.keys():
-				arr.append(key)
-			
-			for value in item.values():
-				if type(value) == int:
-					arr.append(value)
-				else:
-					for el in value:
-						arr.append(el)
+		# if it's a list, cool, but if it's an object / dict, we have to create a corresponding list
+		for item in quota["markers"]:
+			if isinstance(item, list):
+				marker_lists.append(item[:])
+			elif isinstance(item, dict):
+				markers = []
+				for i in range(int(item["start"]), int(item["end"]) + 1, int(item["step"])):
+					markers.append("{}{}{}".format(item["label"], item["separator"], i))
 
-			stack.append(arr)
+				marker_lists.append(markers)
 
-		rec_quotaline(csv_file, stack, "")
+		generate_quotaline(csv_file, marker_lists, "")
 		csv_file.write("\n")
 
 	csv_file.close()
 	json_file.close()
 
 
-# 1st file is the dequoter.py
+quota_limit = "999"
+
+# 1st file is the dequoter.py so we ignore that
 for file in sys.argv[1:]:
 	generate_csv(file)
