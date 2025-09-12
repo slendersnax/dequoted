@@ -3,6 +3,8 @@
 A web-based quota generator for Decipher. 
 Did you know that you can copy html tables into Excel and they'll keep their data? :D
 
+You can now use it online without any kind of tracking (unless GitHub put some there) [here](https://slendersnax.github.io/dequoted/dequoter-web/index-dequote.html).
+
 ### prerequisites
 
 - a relatively modern browser that supports Custom Web Components and the Shadow Root
