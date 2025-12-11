@@ -30,12 +30,6 @@
                 text-decoration: none;
             }
 
-            /*button, input, textarea {
-                border: none;
-                outline: none;
-                background: none;
-            }*/
-
             /* element styles */
             :root {
                 --theme-blue-border: rgba(0, 50, 100, 0.2);
@@ -44,7 +38,7 @@
             }
 
             body {
-                background-color: var(--theme-blue-border);
+                background-color: #fff;
             }
 
             #main-container {
@@ -52,7 +46,6 @@
                 min-height: 100vh;
                 margin: auto;
                 background-color: #fff;
-                box-shadow: 0px 2px 10px #111;
                 padding-bottom: 4px;
             }
 
@@ -90,6 +83,19 @@
                 text-align: center;
             }
 
+            #tutorial {
+                margin-left: 4px;
+            }
+
+            #tutorial summary {
+                cursor: pointer;
+            }
+
+            #tutorial ul {
+                list-style-type: disc;
+                padding-left: 2em;
+            }
+
             #json-section {
                 display: grid;
                 grid-template-columns: 50% 50%;
@@ -111,6 +117,24 @@
         <noscript><strong>Please enable JavaScript to enable full functionality.</strong></noscript>
         <article id="main-container">
             <h1>dequoter</h1>
+
+<!--             <details id="tutorial">
+                <summary>Legend, Help, Terminology - please read this.</summary>
+
+                <p>Help &amp; Terminology:</p>
+                <ul>
+                    <li>cust - custom list i.e. a list of markers with irregular names separated with a custom separator</li>
+                    <li>pat - pattern list i.e. a list of markers with names that follow </li>
+                </ul>
+
+                <p>Legend:</p>
+                <ul>
+                    <li>cust &#8593;&#8593; - add a custom list to the start of the current quota table</li>
+                    <li>cust &#8595;&#8595; - add a custom list to the end of the current quota table</li>
+                    <li>pat &#8593;&#8593; - add a pattern list to the start of the current quota table</li>
+                    <li>pat &#8595;&#8595; - add a pattern list to the end of the current quota table</li>
+                </ul>
+            </details> -->
 
             <section id="json-section">
                 <textarea id="json-source"></textarea>

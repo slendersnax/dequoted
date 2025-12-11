@@ -53,6 +53,7 @@ class PredefinedMarker extends HTMLElement {
 
                 .title > span:last-child {
                     text-align: right;
+                    padding-right: 4px;
                 }
 
                 .title button {
@@ -86,10 +87,10 @@ class PredefinedMarker extends HTMLElement {
             <section>
                 <div class="title">
                     <span><b>markers ${this.sl_id}:</b> predefined</span>
-                    <span id="btn-holder">
-                        <button class="predefined-adder" title="add predefined marker list below">&#128221; below</button>
-                        <button class="pattern-adder" title="add pattern marker list below">&#128291; below</button>
-                        <button class="delete">delete</button>
+                    <span>
+                        <button class="predefined-adder" title="add predefined marker list below">cust &#8595;</button>
+                        <button class="pattern-adder" title="add pattern marker list below">pat &#8595;</button>
+                        <button class="delete">del</button>
                     </span>
                 </div>
                 <div class="predefined-container">
@@ -220,6 +221,7 @@ class PatternMarker extends HTMLElement {
 
                 .title > span:last-child {
                     text-align: right;
+                    padding-right: 4px;
                 }
 
                 .title button {
@@ -254,10 +256,10 @@ class PatternMarker extends HTMLElement {
             <section>
                 <div class="title">
                     <span><b>markers ${this.sl_id}:</b> pattern</span>
-                    <span id="btn-holder">
-                        <button class="predefined-adder" title="add predefined marker list below">&#128221; below</button>
-                        <button class="pattern-adder" title="add pattern marker list below">&#128291; below</button>
-                        <button class="delete">delete</button>
+                    <span>
+                        <button class="predefined-adder" title="add predefined marker list below">cust &#8595;</button>
+                        <button class="pattern-adder" title="add pattern marker list below">pat &#8595;</button>
+                        <button class="delete">del</button>
                     </span>
                 </div>
                 <div class="pattern-container">
@@ -541,15 +543,15 @@ class QuotaDefinition extends HTMLElement {
                                 </div>
 
                                 <div class="command-btns">
-                                    <button class="table-generator">&#9881; generate table</button>
-                                    <button class="table-copy-btn">copy quota table</button>
+                                    <button class="table-generator">gen. table</button>
+                                    <button class="table-copy-btn">copy table</button>
                                 </div>
 
                                 <div class="command-btns">
-                                    <button class="predefined-adder" title="add predefined marker list at the start">+ &#128221; start</button>
-                                    <button class="predefined-adder" title="add predefined marker list at the end">+ &#128221; end</button>
-                                    <button class="pattern-adder" title="add pattern marker list at the start">+ &#128291; start</button>
-                                    <button class="pattern-adder" title="add pattern marker list at the end">+ &#128291; end</button>
+                                    <button class="predefined-adder" title="add predefined marker list at the start">cust &#8593;&#8593;</button>
+                                    <button class="predefined-adder" title="add predefined marker list at the end">cust &#8595;&#8595;</button>
+                                    <button class="pattern-adder" title="add pattern marker list at the start">pat &#8593;&#8593;</button>
+                                    <button class="pattern-adder" title="add pattern marker list at the end">pat &#8595;&#8595;</button>
                                 </div>
 
                                 <div class="marker-container">
