@@ -711,6 +711,8 @@ class QuotaDefinition extends HTMLElement {
         for(let i = 0; i < markerArr.length; i ++) {
             let newEl;
 
+            // predefined / custom lists are saved as arrays
+            // whereas pattern lists are saved as objects
             if (Array.isArray(markerArr[i])) {
                 newEl = this.getNewPredefined(markerArr[i]);
             }

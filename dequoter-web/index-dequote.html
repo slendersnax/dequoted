@@ -84,16 +84,52 @@
             }
 
             #tutorial {
-                margin-left: 4px;
+                margin-top: 4px;
+                margin-bottom: 4px;
             }
 
             #tutorial summary {
                 cursor: pointer;
+                text-align: center;
+                font-size: 1.2rem;
             }
 
-            #tutorial ul {
-                list-style-type: disc;
-                padding-left: 2em;
+            #tutorial table {
+                background-color: #fcfcfc;
+                border: 0.5px solid var(--theme-blue-border);
+                border-collapse: collapse;
+                margin-bottom: 4px;
+            }
+
+            #tutorial table tr td,
+            #tutorial table tr th {
+                border: 0.5px solid var(--theme-blue-border);
+            }
+
+            #tutorial table tr:nth-child(even) {
+                background-color: #f1f1f1;
+            }
+
+            #tutorial table thead tr:first-child {
+                display: table-row;
+            }
+
+            #tutorial table tbody tr td {
+                padding: 4px;
+            }
+
+            #tutorial table tbody tr td:first-child {
+                text-align: center;
+                vertical-align: middle;
+                
+                min-width: 30%;
+            }
+
+            #tutorial-separator {
+                color: #f1f1f1;
+                margin: auto;
+                margin-top: 4px;
+                margin-bottom: 4px;
             }
 
             #json-section {
@@ -118,23 +154,67 @@
         <article id="main-container">
             <h1>dequoter</h1>
 
-<!--             <details id="tutorial">
-                <summary>Legend, Help, Terminology - please read this.</summary>
+            <details id="tutorial">
+                <summary>Legend, Help, Terminology</summary>
 
-                <p>Help &amp; Terminology:</p>
-                <ul>
-                    <li>cust - custom list i.e. a list of markers with irregular names separated with a custom separator</li>
-                    <li>pat - pattern list i.e. a list of markers with names that follow </li>
-                </ul>
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2">
+                                Legend, Help, Terminology       
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>term</th>
+                            <th>explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>cust</td>
+                            <td>custom list i.e. a list of markers with irregular names separated by space</td>
+                        </tr>
+                        <tr>
+                            <td>pat</td>
+                            <td>
+                                pattern list i.e. a list of markers with regular names that can be generated in the following format:<br/>
+                                [marker name][optional separator][numbers from <i>start</i> to <i>end</i>, increasing by <i>step</i> amount]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>gen. table</td>
+                            <td>generate the quota table for the current definition</td>
+                        </tr>
+                        <tr>
+                            <td>cust &#8593;&#8593;</td>
+                            <td>add a custom list to the start of the current quota table</td>
+                        </tr>
+                        <tr>
+                            <td>cust &#8595;&#8595;</td>
+                            <td>add a custom list to the end of the current quota table</td>
+                        </tr>
+                        <tr>
+                            <td>pat &#8593;&#8593;</td>
+                            <td>add a pattern list to the start of the current quota table</td>
+                        </tr>
+                        <tr>
+                            <td>pat &#8595;&#8595;</td>
+                            <td>add a pattern list to the end of the current quota table</td>
+                        </tr>
 
-                <p>Legend:</p>
-                <ul>
-                    <li>cust &#8593;&#8593; - add a custom list to the start of the current quota table</li>
-                    <li>cust &#8595;&#8595; - add a custom list to the end of the current quota table</li>
-                    <li>pat &#8593;&#8593; - add a pattern list to the start of the current quota table</li>
-                    <li>pat &#8595;&#8595; - add a pattern list to the end of the current quota table</li>
-                </ul>
-            </details> -->
+                        <tr>
+                            <td>cust &#8595;</td>
+                            <td>add a custom list right under the current list</td>
+                        </tr>
+                        <tr>
+                            <td>pat &#8595;</td>
+                            <td>add a pattern list right under the current list</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </details>
+
+            <hr id="tutorial-separator">
 
             <section id="json-section">
                 <textarea id="json-source"></textarea>
