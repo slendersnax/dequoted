@@ -524,6 +524,7 @@ class QuotaDefinition extends HTMLElement {
                             <span class="quota-title">Quota #${this.sl_id}</span>
                         </span>
                         <span class="btn-holder">
+                            <button class="copy-definition">duplicate quota below</button>
                             <button class="add-definition">add quota below</button>
                             <button class="delete">delete</button>
                         </span>
@@ -637,6 +638,15 @@ class QuotaDefinition extends HTMLElement {
             document.execCommand("copy");
 
             alert(`Table ${host.sl_id} has been copied to the clipboard.`);
+        });
+
+        this.shadowRoot.querySelector(".copy-definition").addEventListener("click", function() {
+            const newDef = getNewDefinition();
+            const hostObj = host.getObj();
+
+            newDef.fillQuota(hostObj.name, hostObj.cells, hostObj.limit, hostObj.markers);
+
+            document.querySelector(`[sl_id='${host.sl_id}']`).after(newDef);
         });
 
         this.shadowRoot.querySelector(".add-definition").addEventListener("click", function() {
