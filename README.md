@@ -10,7 +10,6 @@ The JSON output of `dequoter-web` can now be used for `dequoter-py`. :)
 
 ### to-do
 
-- [ ] maybe generate `.xls` files directly?
-    - [ ] `dequoter-py`
-    - [ ] `dequoter-web`
+- [ ] ~~maybe generate `.xls` files directly?~~
+    - no, this just aims to replace the most annoying part of creating quotas, not all of it; too many edge cases that aren't worth the bother
 - [ ] tests?

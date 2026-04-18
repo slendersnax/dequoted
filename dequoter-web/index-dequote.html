@@ -115,7 +115,12 @@
                 display: table-row;
             }
 
-            #tutorial table tbody tr td {
+            #tutorial table thead tr:last-child th:last-child {
+                text-align: left;
+            }
+
+            #tutorial table tbody tr td,
+            #tutorial table thead tr th {
                 padding: 4px;
             }
 
@@ -173,13 +178,15 @@
                     <tbody>
                         <tr>
                             <td>cust</td>
-                            <td>custom list i.e. a list of markers with irregular names separated by space</td>
+                            <td>custom list i.e. a list of markers with irregular names separated by spaces</td>
                         </tr>
                         <tr>
                             <td>pat</td>
                             <td>
                                 pattern list i.e. a list of markers with regular names that can be generated in the following format:<br/>
-                                [marker name][optional separator][numbers from <i>start</i> to <i>end</i>, increasing by <i>step</i> amount]
+                                [marker name][optional separator][numbers from <i>start</i> to <i>end</i>, increasing by <i>step</i> amount]<br/>
+                                <br/>
+                                <i>start</i> can be a bigger number than <i>end</i>, in which case <i>step</i> has to be a negative number
                             </td>
                         </tr>
                         <tr>

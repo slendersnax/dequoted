@@ -272,7 +272,7 @@ class PatternMarker extends HTMLElement {
                     <div>
                         <input type="number" id="start"/>
                         <input type="number" id="end"/>
-                        <input type="number" id="step" value="1" />
+                        <input type="number" id="step" value="1"/>
                     </div>
                 </div>
             </section>`;
@@ -344,10 +344,22 @@ class PatternMarker extends HTMLElement {
         const end   = this.shadowRoot.querySelector("#end").valueAsNumber;
         const step  = this.shadowRoot.querySelector("#step").valueAsNumber;
 
-        // TODO: TEST IF WORKS FROM BIG NUM -> SMALL NUM
-        for(let i = start; i <= end; i += step) {
-            markers.push(`${markerName}${separator}${i}`);
+        // some input validation
+        // also maybe it's needed to go from big number to small number, so that's implemented too
+        if (Number.isInteger(start) && Number.isInteger(end) && Number.isInteger(step)) {
+            if (start <= end && step > 0) {
+                for(let i = start; i <= end; i += step) {
+                    markers.push(`${markerName}${separator}${i}`);
+                }
+            }
+            else if (start > end && step < 0) {
+                for(let i = start; i >= end; i += step) {
+                    markers.push(`${markerName}${separator}${i}`);
+                }
+            }
         }
+
+        console.log(markers);
 
         return markers;
     }
@@ -635,6 +647,7 @@ class QuotaDefinition extends HTMLElement {
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
 
+            // TODO: replace with clipboard API
             document.execCommand("copy");
 
             alert(`Table ${host.sl_id} has been copied to the clipboard.`);
@@ -680,6 +693,7 @@ class QuotaDefinition extends HTMLElement {
         newEl.classList.add("marker");
         newEl.setAttribute("sl_id", `${this.#markerlists}`);
 
+        // this works because the sl-predefined-marker has a 'predefined' property (set predefined) that you can set as seen below
         if (predefinedMarkers != null) {
             newEl.predefined = predefinedMarkers;
         }
@@ -694,6 +708,7 @@ class QuotaDefinition extends HTMLElement {
         newEl.classList.add("marker");
         newEl.setAttribute("sl_id", `${this.#markerlists}`);
 
+        // this works because the sl-pattern-marker has a 'pattern' property (set pattern) that you can set as seen below
         if (patternMarker != null) {
             newEl.pattern = patternMarker;
         }
