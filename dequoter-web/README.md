@@ -39,6 +39,7 @@ You can generate JSON from the existing quotas and you can generate quotas from 
     {
         "name": "gender x age",
         "cells": "1",
+        "limit": "inf",
         "markers": [
             ["gender_1", "gender_8", "gender49"],
             {"label": "age", "separator": "_", "start": "2", "end": "6", "step": "1"}
@@ -47,6 +48,7 @@ You can generate JSON from the existing quotas and you can generate quotas from 
     {
         "name": "country x cell",
         "cells": "1",
+        "limit": "inf",
         "markers": [
             {"label": "dCountry", "separator": ".r", "start": "1", "end": "4", "step": "1"},
             {"label": "dCell", "separator": ".r", "start": "1", "end": "4", "step": "1"}
