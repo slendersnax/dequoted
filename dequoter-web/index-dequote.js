@@ -128,8 +128,6 @@ class PredefinedMarker extends HTMLElement {
         });
 
         this.shadowRoot.querySelector(".predefined-adder").addEventListener("click", function() {
-            console.log("requested markers");
-
             const markerAddEvent = new CustomEvent("request-markers", {
                 bubbles: true,
                 detail: { type: "predefined", after: host.sl_id },
@@ -139,8 +137,6 @@ class PredefinedMarker extends HTMLElement {
         });
 
         this.shadowRoot.querySelector(".pattern-adder").addEventListener("click", function() {
-            console.log("requested markers");
-
             const markerAddEvent = new CustomEvent("request-markers", {
                 bubbles: true,
                 detail: { type: "pattern", after: host.sl_id },
@@ -305,8 +301,6 @@ class PatternMarker extends HTMLElement {
         });
 
         this.shadowRoot.querySelector(".predefined-adder").addEventListener("click", function() {
-            console.log("requested markers");
-
             const markerAddEvent = new CustomEvent("request-markers", {
                 bubbles: true,
                 detail: { type: "predefined", after: host.sl_id },
@@ -316,8 +310,6 @@ class PatternMarker extends HTMLElement {
         });
 
         this.shadowRoot.querySelector(".pattern-adder").addEventListener("click", function() {
-            console.log("requested markers");
-
             const markerAddEvent = new CustomEvent("request-markers", {
                 bubbles: true,
                 detail: { type: "pattern", after: host.sl_id },
@@ -358,8 +350,6 @@ class PatternMarker extends HTMLElement {
                 }
             }
         }
-
-        console.log(markers);
 
         return markers;
     }
