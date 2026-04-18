@@ -59,6 +59,7 @@ This JSON code will create the following setup:
 
 ![example quota](example_1.png?)
 ![example quota](example_2.png?)
+![example quota](example_3.png?)
 
 ### to-do
 
