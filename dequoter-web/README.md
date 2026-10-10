@@ -24,7 +24,7 @@ You can generate JSON from the existing quotas and you can generate quotas from 
     - the markers are separated into two groups:
         - **pat** (pattern markers): a list of markers which can be generated due to its pattern-like nature, e.g. cells based on a `QRegion` question with item labels going from `r1` to `r40` (basically a `for` loop, but specifically based on the Python `range()` function)
             - hint: it's possible to go from a bigger number to a smaller number too, in which case the `step` has to be a negative number
-        - **cust** (custom markers): a list of markers *separated by spaces* which can't be generated using a pattern, e.g. a `QRegion` question where the items go `r1, x3, rx7, r20, r11`
+        - **cust** (custom markers): a list of markers separated by whitespace (can be newlines, tabs, spaces, etc.) which can't be generated using a pattern, e.g. a `QRegion` question where the items go `r1, x3, rx7, r20, r11`
 
     - you can add each of these marker lists to the beginning or the end of the quota markers, as well as right below another existing marker list
     - in case anything is unclear about this section, there's a table with helpful info on the webpage itself
@@ -67,3 +67,4 @@ This JSON code will create the following setup:
 
 - [x] FIX: on some Chromium browsers the HTML entities aren't showing up (everything else works though, so what gives?)
     - fixed by using different entities that do work
+- [x] updated the `custom markers` so that the markers can be separated by any amount and kind of whitespace

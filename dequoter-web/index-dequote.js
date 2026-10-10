@@ -151,11 +151,19 @@ class PredefinedMarker extends HTMLElement {
     }
 
     get markerList() {
-        return this.shadowRoot.querySelector("#predef-markers").value.split(" ");
+        // finds all the non-whitespace series of characters and returns an array formed of them
+        // or an empty one if there's none
+        return this.shadowRoot
+            .querySelector("#predef-markers")
+            .value
+            .match(/\S+/g) ?? [];
     }
 
     getObj() {
-        return this.shadowRoot.querySelector("#predef-markers").value.split(" ");
+        return this.shadowRoot
+            .querySelector("#predef-markers")
+            .value
+            .match(/\S+/g) ?? [];
     }
 }
 
