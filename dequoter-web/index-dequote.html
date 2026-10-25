@@ -138,7 +138,8 @@
                 margin-bottom: 4px;
             }
 
-            #json-section {
+            #json-section,
+            #sparse-setting {
                 display: grid;
                 grid-template-columns: 50% 50%;
                 border-bottom: 2px solid var(--theme-blue-border);
@@ -156,7 +157,7 @@
         <title>dequoter</title>
     </head>
     <body>
-        <noscript><strong>Please enable JavaScript to enable full functionality.</strong></noscript>
+        <noscript><strong>Please enable JavaScript if you wish to make use of this website. It only uses JavaScript for the custom elements and no data is collected.</strong></noscript>
         <article id="main-container">
             <h1>dequoter</h1>
 
@@ -192,6 +193,11 @@
                         <tr>
                             <td>gen. table</td>
                             <td>generate the quota table for the current definition</td>
+                        </tr>
+                        <tr>
+                            <td>Sparse Table</td>
+                            <td>default value: <b>true</b><br/>
+                            when true / checked, this will omit the unimportant markers from each line, i.e. those that haven't changed compared to the line above</td>
                         </tr>
                         <tr>
                             <td>cust &#8593;&#8593;</td>
@@ -232,6 +238,10 @@
                 <button id="generate-to-json">generate JSON from quotas</button>
             </section>
 
+            <div id="sparse-setting">
+                <button class="set-sparse-all">set all table generation to <b>Sparse</b></button>
+                <button class="set-full-all">set all table generation to <b>Full</b></button>
+            </div>
 
             <div id="quota-adders">
                 <button class="add-definition-start">add quota at the start</button>

@@ -3,7 +3,7 @@
 A web-based quota generator for Decipher. 
 Did you know that you can copy html tables into Excel and they'll keep their data? :D
 
-You can now use it online without any kind of tracking (unless GitHub put some there) [here](https://slendersnax.github.io/dequoted/dequoter-web/index-dequote.html).
+You can now use it online (with no tracking, unless GitHub put some there) [here](https://slendersnax.github.io/dequoted/dequoter-web/index-dequote.html).
 
 ### prerequisites
 
@@ -16,6 +16,7 @@ You can generate JSON from the existing quotas and you can generate quotas from 
 
 0. \[Optional - See Step 5 before this\] Copy any JSON code you may have into the text field above the `generate quotas from JSON` button, then press the button to generate the saved quota setup
 1. Create a quota or multiple quotas
+    - **Sparse Table**: when this is checked the unimportant markers, i.e. those that haven't changed compared to the line above, will be omitted. This is enabled for all tables by default. Check the screenshots below to see a comparison
 2. Inside each quota are text fields that directly correspond to attributes from [quota tables](https://forstasurveys.zendesk.com/hc/en-us/articles/10100597040795-Adding-Quotas-Using-the-XML-Editor)
     - name: table name
     - cells: number of cells to be picked from the table; this is 1 by default, increase for quotas based on Multiple Choice questions or Least Fill setups
@@ -40,6 +41,7 @@ You can generate JSON from the existing quotas and you can generate quotas from 
         "name": "gender x age",
         "cells": "1",
         "limit": "inf",
+        "sparseTable": false,
         "markers": [
             ["gender_1", "gender_8", "gender49"],
             {"label": "age", "separator": "_", "start": "2", "end": "6", "step": "1"}
@@ -49,6 +51,7 @@ You can generate JSON from the existing quotas and you can generate quotas from 
         "name": "country x cell",
         "cells": "1",
         "limit": "inf",
+        "sparseTable": true,
         "markers": [
             {"label": "dCountry", "separator": ".r", "start": "1", "end": "4", "step": "1"},
             {"label": "dCell", "separator": ".r", "start": "1", "end": "4", "step": "1"}

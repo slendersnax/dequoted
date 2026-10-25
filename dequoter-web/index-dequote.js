@@ -1,6 +1,3 @@
-// global :)
-let nCurrentQuotas = 0;
-
 // custom elements
 
 class PredefinedMarker extends HTMLElement {
@@ -166,8 +163,6 @@ class PredefinedMarker extends HTMLElement {
             .match(/\S+/g) ?? [];
     }
 }
-
-customElements.define("sl-predefined-marker", PredefinedMarker);
 
 class PatternMarker extends HTMLElement {
     constructor() {
@@ -364,16 +359,14 @@ class PatternMarker extends HTMLElement {
 
     getObj() {
         return {
-            label: this.shadowRoot.querySelector("#label").value,
+            label:     this.shadowRoot.querySelector("#label").value,
             separator: this.shadowRoot.querySelector("#separator").value,
-            start: this.shadowRoot.querySelector("#start").value,
-            end: this.shadowRoot.querySelector("#end").value,
-            step: this.shadowRoot.querySelector("#step").value
+            start:     this.shadowRoot.querySelector("#start").value,
+            end:       this.shadowRoot.querySelector("#end").value,
+            step:      this.shadowRoot.querySelector("#step").value
         };
     }
 }
-
-customElements.define("sl-pattern-marker", PatternMarker);
 
 class QuotaDefinition extends HTMLElement {
     #tableInner = "";
@@ -418,6 +411,10 @@ class QuotaDefinition extends HTMLElement {
                         padding: 6px;
                         border: 1px solid #ccc;
                         border-radius: 4px;
+                    }
+
+                    input[type="checkbox"] {
+                        transform: scale(1.5);
                     }
 
                     details {
@@ -534,6 +531,8 @@ class QuotaDefinition extends HTMLElement {
                             <span class="quota-title">Quota #${this.sl_id}</span>
                         </span>
                         <span class="btn-holder">
+                            <label for="sparse-table">Sparse Table:</label>
+                            <input type="checkbox" id="sparse-table" checked/>
                             <button class="copy-definition">duplicate quota below</button>
                             <button class="add-definition">add quota below</button>
                             <button class="delete">delete</button>
@@ -655,7 +654,7 @@ class QuotaDefinition extends HTMLElement {
             const newDef = getNewDefinition();
             const hostObj = host.getObj();
 
-            newDef.fillQuota(hostObj.name, hostObj.cells, hostObj.limit, hostObj.markers);
+            newDef.fillQuota(hostObj.name, hostObj.cells, hostObj.limit, hostObj.sparseTable, hostObj.markers);
 
             document.querySelector(`[sl_id='${host.sl_id}']`).after(newDef);
         });
@@ -714,12 +713,11 @@ class QuotaDefinition extends HTMLElement {
         return newEl;
     }
 
-    fillQuota(name, cells, limit, markerArr) {
-        const host = this;
-
-        this.shadowRoot.querySelector("#name").value = name;
+    fillQuota(name, cells, limit, sparseTable, markerArr) {
+        this.shadowRoot.querySelector("#name").value    = name;
         this.shadowRoot.querySelector("#cell-no").value = cells;
-        this.shadowRoot.querySelector("#limit").value = limit;
+        this.shadowRoot.querySelector("#limit").value   = limit;
+        this.generateSparseTable                        = sparseTable;
 
         for(let i = 0; i < markerArr.length; i ++) {
             let newEl;
@@ -749,14 +747,36 @@ class QuotaDefinition extends HTMLElement {
     }
 
     generateLines(arrays, currentArray, line) {
-        const host = this;
-
         for(let i = 0; i < arrays[currentArray].length; i ++) {
             if (currentArray < arrays.length - 1) {
-                host.generateLines(arrays, currentArray + 1, `${line}<td>${arrays[currentArray][i]}</td>`);
+                this.generateLines(arrays, currentArray + 1, `${line}<td>${arrays[currentArray][i]}</td>`);
             }
             else {
-                host.#tableInner += `<tr>${line}<td>${arrays[currentArray][i]}</td><td>${host.shadowRoot.querySelector("#limit").value}</td></tr>`;
+                this.#tableInner += `<tr>${line}<td>${arrays[currentArray][i]}</td><td>${this.shadowRoot.querySelector("#limit").value}</td></tr>`;
+            }
+        }
+    }
+
+    // this will omit the unimportant markers from each line, i.e. those that haven't changed compared to the line above
+    generateSparseLines(arrays, currentArray, line) {
+        for (let i = 0; i < arrays[currentArray].length; i ++) {
+            if (currentArray == 0) {
+                this.generateSparseLines(arrays, currentArray + 1, `<td>${arrays[currentArray][i]}</td>`);
+            }
+            else {
+                if (i == 0) {
+                    line = `${line}<td>${arrays[currentArray][i]}</td>`;
+                }
+                else {
+                    line = `${"<td></td>".repeat(currentArray)}<td>${arrays[currentArray][i]}</td>`;
+                }
+
+                if (currentArray < arrays.length - 1) {
+                    this.generateSparseLines(arrays, currentArray + 1, line);
+                }
+                else {
+                    this.#tableInner += `<tr>${line}<td>${this.shadowRoot.querySelector("#limit").value}</td></tr>`;
+                }
             }
         }
     }
@@ -765,6 +785,7 @@ class QuotaDefinition extends HTMLElement {
         const quotaTable  = this.shadowRoot.querySelector("#quota-table");
         const quotaName   = this.shadowRoot.querySelector("#name").value;
         const quotaCellNo = this.shadowRoot.querySelector("#cell-no").value;
+        const sparseTable = this.generateSparseTable;
         const markers = this.markerList;
         let headerRow = "";
         this.#tableInner = "";
@@ -776,14 +797,25 @@ class QuotaDefinition extends HTMLElement {
             headerRow += "<td>#</td>";
         }
 
-        this.generateLines(markers, 0, "");
+        if (sparseTable) {
+            this.generateSparseLines(markers, 0, "");
+        }
+        else {
+            this.generateLines(markers, 0, "");
+        }
 
         quotaTable.innerHTML = `<tr><td># cells:${quotaCellNo} = ${quotaName}</td>${headerRow}<td></td></tr>${this.#tableInner}`;
     }
 
-    getObj() {
-        const host = this;
+    get generateSparseTable() {
+        return this.shadowRoot.querySelector("#sparse-table").checked;
+    }
 
+    set generateSparseTable(sparse) {
+        this.shadowRoot.querySelector("#sparse-table").checked = sparse;
+    }
+
+    getObj() {
         const markerElements = this.shadowRoot.querySelectorAll(".marker");
         const marker_arrs = [];
 
@@ -792,18 +824,25 @@ class QuotaDefinition extends HTMLElement {
         }
 
         return {
-            name: this.shadowRoot.querySelector("#name").value,
-            cells: this.shadowRoot.querySelector("#cell-no").value,
-            limit: this.shadowRoot.querySelector("#limit").value,
-            markers: marker_arrs
+            name:        this.shadowRoot.querySelector("#name").value,
+            cells:       this.shadowRoot.querySelector("#cell-no").value,
+            limit:       this.shadowRoot.querySelector("#limit").value,
+            sparseTable: this.generateSparseTable,
+            markers:     marker_arrs
         };
     }
 }
 
+customElements.define("sl-predefined-marker", PredefinedMarker);
+customElements.define("sl-pattern-marker", PatternMarker);
 customElements.define("sl-quota-definiton", QuotaDefinition);
 
 // main() kinda
 
+// global :)
+let nCurrentQuotas = 0;
+
+// functions
 function generateQuotasFromJSON() {
     document.querySelector("#quota-definitions").replaceChildren();
     nCurrentQuotas = 0;
@@ -813,7 +852,12 @@ function generateQuotasFromJSON() {
     for(let i = 0; i < quotaArr.length; i ++) {
         const newDef = getNewDefinition();
         document.querySelector("#quota-definitions").append(newDef);
-        newDef.fillQuota(quotaArr[i].name, quotaArr[i].cells, quotaArr[i].limit, quotaArr[i].markers);
+
+        if (!Object.hasOwn(quotaArr[i], "sparseTable")) {
+            quotaArr[i].sparseTable = true;
+        }
+
+        newDef.fillQuota(quotaArr[i].name, quotaArr[i].cells, quotaArr[i].limit, quotaArr[i].sparseTable, quotaArr[i].markers);
     }
 }
 
@@ -837,15 +881,38 @@ function getNewDefinition() {
     return newDef;
 }
 
-document.querySelector(".add-definition-start").addEventListener("click", function () {
+function addQuotaDefinitonToStart() {
     const newDef = getNewDefinition();
     document.querySelector("#quota-definitions").prepend(newDef);
-});
+}
 
-document.querySelector(".add-definition-end").addEventListener("click", function () {
+function addQuotaDefinitonToEnd() {
     const newDef = getNewDefinition();
     document.querySelector("#quota-definitions").appendChild(newDef);
-});
+}
 
+function setAllTablesSparse() {
+    const quotaDefs = document.getElementsByTagName("sl-quota-definiton");
+    
+    for (let i = 0; i < quotaDefs.length; i ++) {
+        quotaDefs[i].generateSparseTable = true;
+    };
+}
+
+function setAllTablesFull() {
+    const quotaDefs = document.getElementsByTagName("sl-quota-definiton");
+    
+    for (let i = 0; i < quotaDefs.length; i ++) {
+        quotaDefs[i].generateSparseTable = false;
+    };
+}
+
+// adding event listeners
 document.querySelector("#generate-from-json").addEventListener("click", generateQuotasFromJSON);
-document.querySelector("#generate-to-json").addEventListener("click", generateJSONFromQuotas); 
+document.querySelector("#generate-to-json").addEventListener("click", generateJSONFromQuotas);
+
+document.querySelector(".add-definition-start").addEventListener("click", addQuotaDefinitonToStart);
+document.querySelector(".add-definition-end").addEventListener("click", addQuotaDefinitonToEnd);
+
+document.querySelector(".set-sparse-all").addEventListener("click", setAllTablesSparse);
+document.querySelector(".set-full-all").addEventListener("click", setAllTablesFull);
