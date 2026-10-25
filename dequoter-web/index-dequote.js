@@ -1,4 +1,4 @@
-// globa :)
+// global :)
 let nCurrentQuotas = 0;
 
 // custom elements
@@ -86,15 +86,15 @@ class PredefinedMarker extends HTMLElement {
 
             <section>
                 <div class="title">
-                    <span><b>markers ${this.sl_id}:</b> predefined</span>
+                    <span><b>markers ${this.sl_id}:</b> custom</span>
                     <span>
-                        <button class="predefined-adder" title="add predefined marker list below">cust &#8595;</button>
+                        <button class="predefined-adder" title="add custom marker list below">cust &#8595;</button>
                         <button class="pattern-adder" title="add pattern marker list below">pat &#8595;</button>
                         <button class="delete">del</button>
                     </span>
                 </div>
                 <div class="predefined-container">
-                    <label for="predef-markers">predefined markers</label>
+                    <label for="predef-markers">custom markers</label>
                     <textarea id="predef-markers" placeholder="region_1 region_8 region49"></textarea>
                 </div>
             </section>`;
@@ -116,7 +116,7 @@ class PredefinedMarker extends HTMLElement {
     }
 
     update() {
-        this.shadowRoot.querySelector(".title > span:first-of-type").innerHTML = `<b>markers ${this.sl_id}:</b> predefined`;
+        this.shadowRoot.querySelector(".title > span:first-of-type").innerHTML = `<b>markers ${this.sl_id}:</b> custom`;
     }
 
     connectedCallback() {
@@ -261,7 +261,7 @@ class PatternMarker extends HTMLElement {
                 <div class="title">
                     <span><b>markers ${this.sl_id}:</b> pattern</span>
                     <span>
-                        <button class="predefined-adder" title="add predefined marker list below">cust &#8595;</button>
+                        <button class="predefined-adder" title="add custom marker list below">cust &#8595;</button>
                         <button class="pattern-adder" title="add pattern marker list below">pat &#8595;</button>
                         <button class="delete">del</button>
                     </span>
@@ -559,8 +559,8 @@ class QuotaDefinition extends HTMLElement {
                                 </div>
 
                                 <div class="command-btns">
-                                    <button class="predefined-adder" title="add predefined marker list at the start">cust &#8593;&#8593;</button>
-                                    <button class="predefined-adder" title="add predefined marker list at the end">cust &#8595;&#8595;</button>
+                                    <button class="predefined-adder" title="add custom marker list at the start">cust &#8593;&#8593;</button>
+                                    <button class="predefined-adder" title="add custom marker list at the end">cust &#8595;&#8595;</button>
                                     <button class="pattern-adder" title="add pattern marker list at the start">pat &#8593;&#8593;</button>
                                     <button class="pattern-adder" title="add pattern marker list at the end">pat &#8595;&#8595;</button>
                                 </div>
