@@ -761,7 +761,12 @@ class QuotaDefinition extends HTMLElement {
     generateSparseLines(arrays, currentArray, line) {
         for (let i = 0; i < arrays[currentArray].length; i ++) {
             if (currentArray == 0) {
-                this.generateSparseLines(arrays, currentArray + 1, `<td>${arrays[currentArray][i]}</td>`);
+                if (arrays.length > 1) {
+                    this.generateSparseLines(arrays, currentArray + 1, `<td>${arrays[currentArray][i]}</td>`);
+                }
+                else {
+                    this.#tableInner += `<tr><td>${arrays[currentArray][i]}</td><td>${this.shadowRoot.querySelector("#limit").value}</td></tr>`;
+                }
             }
             else {
                 if (i == 0) {
